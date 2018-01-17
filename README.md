@@ -1,1 +1,1 @@
-# Pente
+# Pente Game
