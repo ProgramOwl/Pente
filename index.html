@@ -1,0 +1,26 @@
+<!Doctype html>
+<html>
+<head>
+	<link href='style.css' rel='stylesheet'/>
+</head>
+	<body>
+		<div id='mainPanel'>
+    <div class='panel' id="indexPanel">
+      <div id='homeTitleBar'>
+		  <h1>Welcome to the Game of Nim</h1>
+		</div>
+  <form name="myForm" onsubmit="return onSubmit()">
+    <div id="gameType_Selection">
+		<p><input type="radio" name="gameType" id="gameType_PvP" value="PvP"/> PvP</p>
+		<p><input type="radio" name="gameType" id="gameType_PvC" value="PvC" checked/> PvC</p>
+    </div>
+    <p>Player 1: <input type="text" placeholder="Player 1" id="player1Name"/></p>
+    <p id="player2">Player 2: <input type="text" placeholder="Player 2" id="player2Name"/></p>
+    <input type="submit" value="Start Game" class="btn"/>
+  </form>
+			</div>
+		</div>	
+
+        <script src='form.js'></script>
+	</body>
+</html>
