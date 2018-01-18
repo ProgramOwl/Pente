@@ -6,3 +6,6 @@ html {
     --color-5: #46444C;
     background: var(--color-5);
 }
+#message_box {
+    display: none;
+}
