@@ -1,44 +1,88 @@
-var Height = 20 * 14,
-	Width = 20 * 14,
+var Height = 600,
+	Width = 600,
 	isPlayerVsComputer = false,
 	player1Name = "Player 1",
-	player2Name = "Player 2";
+	player2Name = "Player 2",
+	boardStateArray = [[0,0,0,0,0, 0,0,0,0, 0, 0,0,0,0, 0,0,0,0,0],
+					   [0,0,0,0,0, 0,0,0,0, 0, 0,0,0,0, 0,0,0,0,0],
+					   [0,0,0,0,0, 0,0,0,0, 0, 0,0,0,0, 0,0,0,0,0],
+					   [0,0,0,0,0, 0,0,0,0, 0, 0,0,0,0, 0,0,0,0,0],
+					   [0,0,0,0,0, 0,0,0,0, 0, 0,0,0,0, 0,0,0,0,0],
+					   
+					   [0,0,0,0,0, 0,0,0,0, 0, 0,0,0,0, 0,0,0,0,0],
+					   [0,0,0,0,0, 0,0,0,0, 0, 0,0,0,0, 0,0,0,0,0],
+					   [0,0,0,0,0, 0,0,0,0, 0, 0,0,0,0, 0,0,0,0,0],
+					   [0,0,0,0,0, 0,0,0,0, 0, 0,0,0,0, 0,0,0,0,0],
+					   
+					   [0,0,0,0,0, 0,0,0,0, 1, 0,0,0,0, 0,0,0,0,0],
+					   
+					   [0,0,0,0,0, 0,0,0,0, 0, 0,0,0,0, 0,0,0,0,0],
+					   [0,0,0,0,0, 0,0,0,0, 0, 0,0,0,0, 0,0,0,0,0],
+					   [0,0,0,0,0, 0,0,0,0, 0, 0,0,0,0, 0,0,0,0,0],
+					   [0,0,0,0,0, 0,0,0,0, 0, 0,0,0,0, 0,0,0,0,0],
+					   
+					   [0,0,0,0,0, 0,0,0,0, 0, 0,0,0,0, 0,0,0,0,0],
+					   [0,0,0,0,0, 0,0,0,0, 0, 0,0,0,0, 0,0,0,0,0],
+					   [0,0,0,0,0, 0,0,0,0, 0, 0,0,0,0, 0,0,0,0,0],
+					   [0,0,0,0,0, 0,0,0,0, 0, 0,0,0,0, 0,0,0,0,0],
+					   [0,0,0,0,0, 0,0,0,0, 0, 0,0,0,0, 0,0,0,0,0]];
 
 function CreateGameBoard(){
 	
 	if (document.getElementById('our_canvas')) {
 	var canvas = document.getElementById('our_canvas');
 	var ctx = canvas.getContext('2d');
+	canvas.addEventListener('mousedown', function(evt) {MouseClickValidation(canvas, evt);});
 	
-	var x = 5,
-		y = 5;
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = "#DDD";
+		
+	var x = (Width/20),
+		y = (Height/20);
 	//vertical lines	
     ctx.beginPath();
-    ctx.moveTo(	x+5, y);
-	for(var i = 0; i< 20; i++){
-		ctx.lineTo(x+5, (Height-y));
-		x = x + 14;
-		ctx.moveTo(x, y);
+    ctx.moveTo(x, y);
+	for(var i = 0; i< 19; i++){
+    	ctx.moveTo(x, y);
+		ctx.lineTo(x, Height-(Height/20));
+		x = x + (Width/20);
 	}
     ctx.closePath();
     ctx.stroke();
 
-	x = 5;
-	y = 5;
+	x = (Width/20);
+	y = (Height/20);
 	//horizontal lines	
     ctx.beginPath();
-    ctx.moveTo(	x, y+5);
-	for(var i = 0; i< 20; i++){
-		ctx.lineTo((Width-x), y+5);
-		y = y + 14;
-		ctx.moveTo(x, y);
+    ctx.moveTo(x, y);
+	for(var i = 0; i< 19; i++){
+    	ctx.moveTo(x, y);
+		ctx.lineTo(Width-(Width/20), y);
+		y = y + (Height/20);
 	}
     ctx.closePath();
     ctx.stroke();
 	}
-}
-function MouseClickValidation(){
 	
+}
+function MouseClickValidation(canvas, event) {
+    var rect = canvas.getBoundingClientRect();
+    var x = event.clientX - rect.left;
+    var y = event.clientY - rect.top;
+    console.log("x: " + x + " y: " + y);  
+	x = Math.floor(((x/Width)*20)+0.5);
+	y = Math.floor(((y/Height)*20)+0.5);
+	console.log("x: " + x + " y: " + y);
+	if(x>0&&y>0&&x<20&&y<20){
+		//call next step
+		//check if array at index is == 0
+	}
+}
+
+function PlaceToken(xAxis,yAxis){
+	//x,y are center, tokens range out Math.floor((Width/20)*(2/3));
+	//Set [y][x] to corresponding color value
+	//then check state conditions
 }
 
 
@@ -64,8 +108,8 @@ function SetUpGame() {
 	player1Name = (vars.p1) ? vars.p1 : "Player 1";
 	player2Name = (vars.p2) ? vars.p2 : (isPlayerVsComputer) ? "Computer" : "Player 2";
 	console.log(isPlayerVsComputer,player1Name,player2Name);
-    document.getElementById('lblTurn').innerHTML = player1Name + "'s Turn";
-    //document.getElementById('btnEndTurn').disabled = true;
+    document.getElementById('current_player').innerHTML = player1Name + "'s Turn";
+	CreateGameBoard();
 }
 
-SetUpGame();
+window.addEventListener("onload", SetUpGame());
