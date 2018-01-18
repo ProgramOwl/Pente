@@ -1,0 +1,8 @@
+html {
+    --color-1: #000;
+    --color-2: #FFF;
+    --color-3: #00E3D8;
+    --color-4: #8A3119;
+    --color-5: #46444C;
+    background: var(--color-5);
+}
