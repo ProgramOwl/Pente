@@ -57,7 +57,7 @@ function onSubmit() {
     }
 	
     linkAddress = linkAddress + "&p1=" + ConvertNameToLink(name1) + "&p2=" + ConvertNameToLink(name2);
-	window.location = "hard.html" + linkAddress;
+	window.location = "pente.html" + linkAddress;
 	return false;
 }
 
