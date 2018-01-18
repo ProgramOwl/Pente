@@ -18,6 +18,14 @@ body {
     border: 4px solid var(--color-2);
     border-radius: 20px;
 }
+#gamePanel {
+    font-family: 'Aladin', cursive;
+    display: inline-block;
+    color: var(--color-3);
+    background: var(--color-5);
+    border: 4px solid var(--color-2);
+    border-radius: 20px;
+}
 #indexPanel{
     height: 315px;
     width: 575px;
@@ -85,10 +93,16 @@ input[type='radio']:checked:after {
     font-family: 'Aladin', cursive;
     border: 2px solid var(--color-2);
 }
-
+#current_player {
+    font-size: 25px;
+    border-bottom: 2px solid var(--color-2);
+    margin-top: 4px;
+    margin-bottom: 4px;
+}
 #message_box {
     display: none;
 }
 canvas {
     background: var(--color-4);
+    margin: 10px;
 }
