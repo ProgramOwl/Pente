@@ -1,3 +1,12 @@
+var slider = document.getElementById("slider");
+var output = document.getElementById("sliderValue");
+output.innerHTML = slider.value; // Display the default slider value
+
+// Update the current slider value (each time you drag the slider handle)
+slider.oninput = function() {
+    output.innerHTML = this.value;
+}
+
 //Radio Listeners
 function gameTypeChosen() {
 	document.getElementById("gameType_PvP").onclick = function () {//make second text box visible	

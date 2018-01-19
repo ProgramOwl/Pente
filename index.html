@@ -23,7 +23,32 @@
         <p id="player2">Player 2:
           <input type="text" placeholder="Player 2" id="player2Name" autocomplete="off"/>
         </p>
-        <input type="submit" value="Start Game" class="btn" />
+        <div id="gridSelect">
+          <p id="gridLabel">Grid Dimesions</p>
+          <p id="sliderBox">
+            <input type="range" list="tickmarks" min="9" max="39" step="2" id="slider"/>
+            <datalist id="tickmarks">
+              <option value="9"/>
+              <option value="11"/>
+              <option value="13"/>
+              <option value="15"/>
+              <option value="17"/>
+              <option value="19"/>
+              <option value="21"/>
+              <option value="23"/>
+              <option value="25"/>
+              <option value="27"/>
+              <option value="29"/>
+              <option value="31"/>
+              <option value="33"/>
+              <option value="35"/>
+              <option value="37"/>
+              <option value="39"/>
+            </datalist>
+          </p>
+          <p id="sliderValue"></p>
+        </div>
+        <input type="submit" value="Start Game" class="btn"/>
       </form>
     </div>
   </div>
