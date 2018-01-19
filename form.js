@@ -57,7 +57,7 @@ function onSubmit() {
     name1 = document.getElementById("player1Name").value;
     name2 = "Computer";
 	isPvP = document.getElementById("gameType_PvP").checked;
-    linkAddress = "?c=" + (isPvP ? "f" : "t");
+    linkAddress = "?c=" + (isPvP ? "f" : "t")+"&state=new";
 	name1 = (isNameValid(name1)) ? name1 : "Player 1";
 	
     if (isPvP) {
