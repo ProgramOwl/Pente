@@ -5,15 +5,30 @@
   <link href="https://fonts.googleapis.com/css?family=Aladin" rel="stylesheet">
 </head>
 <body>
-  <div id="gamePanel">
-    <div>
-      <p id="current_player">Player 1's turn</p>
+  <div class="flex-container">
+    <div id="gamePanel">
+      <div>
+        <p id="player_box">
+          <span id="current_player">Player 1's turn</span>
+          <span id="turn_clock">Time Kills ALL</span>
+        </p>
+      </div>
+      <div>
+        <p id="message_box"></p>
+      </div>
+      <div>
+        <canvas id='our_canvas' width="600" height="600"></canvas>
+      </div>
     </div>
-    <div>
-      <p id="message_box"></p>
-    </div>
-    <div>
-      <canvas id='our_canvas' width="600" height="600"></canvas>
+    <div id="gamePanel2">
+      <div id="firstPlayer">
+        <p id="player1">P1</p>
+        <p>Captures: <span id="player1-captures"> 0</span></p>
+      </div>
+      <div id="secondPlayer">
+        <p id="player2">P2</p>
+        <p>Captures: <span id="player2-captures"> 0</span></p>
+      </div>
     </div>
   </div>
   <script src="game.js"></script>
