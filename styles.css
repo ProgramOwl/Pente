@@ -19,7 +19,7 @@ body {
     border-radius: 20px;
 }
 #gamePanel {
-    margin-left: 100px;
+    margin-left: 75px;
     font-family: 'Aladin', cursive;
     display: inline-block;
     color: var(--color-3);
@@ -146,4 +146,12 @@ canvas {
 }
 #secondPlayer {
     border-top: 2px solid var(--color-2);
+}
+a {
+    float: left;
+    color: var(--color-3);
+    background: var(--color-4);
+    border: 2px solid var(--color-2);
+    text-decoration: none;
+    padding: 4px 8px;
 }
