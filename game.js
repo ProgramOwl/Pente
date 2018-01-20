@@ -1,122 +1,83 @@
-var canvas = document.getElementById('our_canvas');
-	ctx = canvas.getContext('2d');
+var canvas = document.getElementById('our_canvas'),
+	ctx = canvas.getContext('2d'),
 	Height = canvas.height,
 	Width = canvas.width;
 var bs = 19, bss = 20,
+	ClockActive, gameOver= false,
 	isPlayerVsComputer = false,
 	player1Name = "Player 1",
 	player1Captures = 0,
 	player2Name = "Player 2",
 	player2Captures = 0,
 	isPlayer1Turn = true,
-	boardStateArray = [[0,0,0,0,0, 0,0,0,0, 0, 0,0,0,0, 0,0,0,0,0],
-					   [0,0,0,0,0, 0,0,0,0, 0, 0,0,0,0, 0,0,0,0,0],
-					   [0,0,0,0,0, 0,0,0,0, 0, 0,0,0,0, 0,0,0,0,0],
-					   [0,0,0,0,0, 0,0,0,0, 0, 0,0,0,0, 0,0,0,0,0],
-					   [0,0,0,0,0, 0,0,0,0, 0, 0,0,0,0, 0,0,0,0,0],
+	boardStateArray;// = [[0,0,0,0,0, 0,0,0,0, 0, 0,0,0,0, 0,0,0,0,0],
+					   //[0,0,0,0,0, 0,0,0,0, 0, 0,0,0,0, 0,0,0,0,0],
+					   //[0,0,0,0,0, 0,0,0,0, 0, 0,0,0,0, 0,0,0,0,0],
+					   //[0,0,0,0,0, 0,0,0,0, 0, 0,0,0,0, 0,0,0,0,0],
+					   //[0,0,0,0,0, 0,0,0,0, 0, 0,0,0,0, 0,0,0,0,0],
 					   
-					   [0,0,0,0,0, 0,0,0,0, 0, 0,0,0,0, 0,0,0,0,0],
-					   [0,0,0,0,0, 0,0,0,0, 0, 0,0,0,0, 0,0,0,0,0],
-					   [0,0,0,0,0, 0,0,0,0, 0, 0,0,0,0, 0,0,0,0,0],
-					   [0,0,0,0,0, 0,0,0,0, 0, 0,0,0,0, 0,0,0,0,0],
+					   //[0,0,0,0,0, 0,0,0,0, 0, 0,0,0,0, 0,0,0,0,0],
+					   //[0,0,0,0,0, 0,0,0,0, 0, 0,0,0,0, 0,0,0,0,0],
+					   //[0,0,0,0,0, 0,0,0,0, 0, 0,0,0,0, 0,0,0,0,0],
+					   //[0,0,0,0,0, 0,0,0,0, 0, 0,0,0,0, 0,0,0,0,0],
 					   
-					   [0,0,0,0,0, 0,0,0,0, 1, 0,0,0,0, 0,0,0,0,0],
+					   //[0,0,0,0,0, 0,0,0,0, 1, 0,0,0,0, 0,0,0,0,0],
 					   
-					   [0,0,0,0,0, 0,0,0,0, 0, 0,0,0,0, 0,0,0,0,0],
-					   [0,0,0,0,0, 0,0,0,0, 0, 0,0,0,0, 0,0,0,0,0],
-					   [0,0,0,0,0, 0,0,0,0, 0, 0,0,0,0, 0,0,0,0,0],
-					   [0,0,0,0,0, 0,0,0,0, 0, 0,0,0,0, 0,0,0,0,0],
+					   //[0,0,0,0,0, 0,0,0,0, 0, 0,0,0,0, 0,0,0,0,0],
+					   //[0,0,0,0,0, 0,0,0,0, 0, 0,0,0,0, 0,0,0,0,0],
+					   //[0,0,0,0,0, 0,0,0,0, 0, 0,0,0,0, 0,0,0,0,0],
+					   //[0,0,0,0,0, 0,0,0,0, 0, 0,0,0,0, 0,0,0,0,0],
 					   
-					   [0,0,0,0,0, 0,0,0,0, 0, 0,0,0,0, 0,0,0,0,0],
-					   [0,0,0,0,0, 0,0,0,0, 0, 0,0,0,0, 0,0,0,0,0],
-					   [0,0,0,0,0, 0,0,0,0, 0, 0,0,0,0, 0,0,0,0,0],
-					   [0,0,0,0,0, 0,0,0,0, 0, 0,0,0,0, 0,0,0,0,0],
-					   [0,0,0,0,0, 0,0,0,0, 0, 0,0,0,0, 0,0,0,0,0]];
+					   //[0,0,0,0,0, 0,0,0,0, 0, 0,0,0,0, 0,0,0,0,0],
+					   //[0,0,0,0,0, 0,0,0,0, 0, 0,0,0,0, 0,0,0,0,0],
+					   //[0,0,0,0,0, 0,0,0,0, 0, 0,0,0,0, 0,0,0,0,0],
+					   //[0,0,0,0,0, 0,0,0,0, 0, 0,0,0,0, 0,0,0,0,0],
+					   //[0,0,0,0,0, 0,0,0,0, 0, 0,0,0,0, 0,0,0,0,0]];
 
-function refresh_Click(){
-    clockStop_Click();    
-    gameOver=false;
-    //backdrop
-    ctx.fillStyle = BACKDROP;
-    ctx.fillRect(0,0,CANVAS_SIZE,CANVAS_SIZE);
-    //sizeRecheck();
-    //new maze
-    myMaze = new Maze(W,H);
-    //console.log("Maze: ",myMaze.MAZE_WIDTH,myMaze.MAZE_HEIGHT);
-    //OBS = (CANVAS_SIZE / ((myMaze.MAZE_HEIGHT>myMaze.MAZE_WIDTH)? myMaze.MAZE_HEIGHT: myMaze.MAZE_WIDTH));
-    Person = new Player(myMaze.StartPoint.x,myMaze.StartPoint.y);//,120,70,180);
-    drawMaze(myMaze, OBS);
-}
 //Timer
 function Clock(){
     //console.log("Clock called");
     var clockInt;
-    var cl = document.getElementById("clock");
+    var cl = document.getElementById("turn_clock");
     var countSec = 0;
     function countTimer(){ 
         countSec++;
-        cl.innerHTML =('Timer: ' + countSec + ' secs');
-        if(countSec> 10800){//21600){//3h,6h
-            clearInterval(clockInt);
-            cl.innerHTML =('Timer: Timed Out');
+        cl.innerHTML =('Time Left: ' + (21-countSec) + ' secs');
+        if(countSec> 20){
+			Turnswap();
+        //cl.innerHTML =('Timer: Timed Out');
         }
     }
     this.startTiming= function(){
         //console.log("Clock start called");
         clockInt = setInterval(countTimer, 1000);
     }
-    this.pauseTiming= function(){
-        //console.log("Clock pause called");
+	this.restartTiming= function(){
+        //console.log("Clock start called");
         clearInterval(clockInt);
+		countSec=0;
+        clockInt = setInterval(countTimer, 1000);
     }
     this.stopTiming= function(){
         clearInterval(clockInt);
         console.log(countSec);
-        document.getElementById("clock").innerHTML =('Timer: ' + countSec + ' secs');
+        document.getElementById("turn_clock").innerHTML =('Time Left: none');
         countSec=0;
     }
 };
-function clockStartPause_Click(){
-        var x=document.getElementById("StartPauseB");
-        if(x.innerHTML=='Start'){
-            x.innerHTML ='Pause';
-            ClockActive.startTiming();  
-            if(robotIsActive){
-                mazeRobot.paused();
-                mazeRobot.start();
-            }          
-            if(gameOver){
-                end.start();
-            }
-        }
-        else{
-            x.innerHTML='Start';
-            ClockActive.pauseTiming();
-            if(robotIsActive){
-                console.log("paused robot");
-                mazeRobot.paused();
-            }
-            if(gameOver){           
-                end.paused();
-            }             
-        }
-    }
-function clockStop_Click(){
-        document.getElementById("StartPauseB").innerHTML='Start';
-        ClockActive.stopTiming();
-        if(robotIsActive){            
-            robotIsActive=false;
-            mazeRobot.paused();
-        }
-        if(gameOver){           
-            end.paused();
-        } 
-        else{ 
-            Person = new Player(myMaze.StartPoint.x,myMaze.StartPoint.y);           
-            resetMaze(myMaze);
-        }
-}
 
+//done
+function CreateBoardArray(){
+	boardStateArray = [bs];
+	for(var y=0; y<bss; y++){
+		boardStateArray[y] = [bs];
+		for(var x=0; x<bss; x++){
+			boardStateArray[y][x]=0;
+		}
+	}
+	boardStateArray[(bss/2)-1][(bss/2)-1] = 1;
+	PlaceToken(bss/2,bss/2,1);
+}
 function CreateGameBoard(){
 		ctx.rect(canvas.width/bss, canvas.height/bss, canvas.width-(canvas.width/(bss/2)), canvas.height-(canvas.height/(bss/2)));
 		ctx.fillStyle = '#CD8646';
@@ -172,6 +133,7 @@ function MouseClickValidation(canvas, event) {
 		if(boardStateArray[y-1][x-1]===0){
 			boardStateArray[y-1][x-1] = (isPlayer1Turn)? 1: 2;
 			PlaceToken(x,y,boardStateArray[y-1][x-1]);
+			//game state check
 			Turnswap();
 		}
 	}
@@ -204,13 +166,12 @@ function PlaceToken(xAxis,yAxis,color){
 	context.fillStyle = grd;
 	context.fill();
 }
-
+//work-on
 function Turnswap(){
-	//run game state check
-	
-	//next
+	//if not gameover
 	isPlayer1Turn = !isPlayer1Turn;
     TurnLabel();
+	ClockActive.restartTiming();
 }
 
 function TurnLabel(){
@@ -219,6 +180,15 @@ function TurnLabel(){
 	document.getElementById('current_player').innerHTML = name + " Turn";
 }
 
+function GameOver(){
+	var name = isPlayer1Turn? player1Name: player2Name;
+	document.getElementById('current_player').innerHTML = name + " is the winner!";
+	
+ClockActive.stopTiming();
+	
+}
+
+//done
 function ConvertLinkToName(link) {
 	//It returns the symbol from the hex value preceded by a %.
 	var tempS = "";
@@ -229,12 +199,12 @@ function ConvertLinkToName(link) {
 	//console.log(link);
 	return link;
 }
-
+//empty
 function saveGame(){
 	//write to file
 	//names, PvC, captures, Array
 }
-
+//done
 function NewGame(vars){
     //set player 1 & 2's names, change computer bool
 	isPlayerVsComputer = (vars.c) ? vars.c === "t" : true;
@@ -252,14 +222,14 @@ function NewGame(vars){
 	bss = bs+1;
 	
 	CreateGameBoard();
+	CreateBoardArray();
+	
 	canvas.addEventListener('mousedown', function(evt) {
 		MouseClickValidation(canvas, evt);
 	});
-	
-	PlaceToken(bss/2,bss/2,1);
 	Turnswap();
 }
-
+//work-on
 function loadGame(){
 	var vars = {};
 	//read
@@ -284,20 +254,26 @@ function loadGame(){
 }
 
 //check for file existance
+//Just need to add file name
 function SetUpGame() {
+	ClockActive = new Clock();
 	var vars = {},
         parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function (n, key, value) {
 			value = ConvertLinkToName(value);
             vars[key] = value;
         });
-	if (vars.state) {
+	if (vars.state && vars.state !== 'new') {
 		if (vars.state === 'load') {
 			canvas.addEventListener('mousedown', function(evt) {
 				MouseClickValidation(canvas, evt);
 			});		
 		}
+		
+ClockActive.startTiming();
 		loadGame();		
 	} else {
+		
+ClockActive.startTiming();
 		NewGame(vars);	
 	}
 }
