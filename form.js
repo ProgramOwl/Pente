@@ -22,7 +22,7 @@ function gameTypeChosen() {
 }
 
 //variables
-var name1, name2, isPvP, linkS;
+var name1, name2, isPvP;
 
 //Checks
 function isNameValid(name) {
@@ -57,7 +57,7 @@ function onSubmit() {
     name1 = document.getElementById("player1Name").value;
     name2 = "Computer";
 	isPvP = document.getElementById("gameType_PvP").checked;
-    linkAddress = "?c=" + (isPvP ? "f" : "t")+"&bs="+document.getElementById("slider").value+"&state=new";
+    var linkAddress = "?c=" + (isPvP ? "f" : "t")+"&bs="+document.getElementById("slider").value+"&state=new";
 	name1 = (isNameValid(name1)) ? name1 : "Player 1";
 	
     if (isPvP) {
@@ -68,6 +68,11 @@ function onSubmit() {
     linkAddress = linkAddress + "&p1=" + ConvertNameToLink(name1) + "&p2=" + ConvertNameToLink(name2);
 	window.location = "pente.html" + linkAddress;
 	return false;
+}
+
+function fileLoad(fileName){
+	var linkAddress = "?state=load"+"&fileName="+fileName;
+	window.location = "pente.html" + linkAddress;
 }
 
 window.addEventListener("onload", gameTypeChosen());
