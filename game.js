@@ -4,79 +4,58 @@ var canvas = document.getElementById('our_canvas'),
 	Width = canvas.width;
 var bs = 19, bss = 20,
 	turnTwo = true,
-	ClockActive, gameOver= false,
+	ClockActive, gameOver = false,
 	isPlayerVsComputer = false,
 	player1Name = "Player 1",
 	player1Captures = 0,
 	player2Name = "Player 2",
 	player2Captures = 0,
 	isPlayer1Turn = true,
-	boardStateArray;// = [[0,0,0,0,0, 0,0,0,0, 0, 0,0,0,0, 0,0,0,0,0],
-					   //[0,0,0,0,0, 0,0,0,0, 0, 0,0,0,0, 0,0,0,0,0],
-					   //[0,0,0,0,0, 0,0,0,0, 0, 0,0,0,0, 0,0,0,0,0],
-					   //[0,0,0,0,0, 0,0,0,0, 0, 0,0,0,0, 0,0,0,0,0],
-					   //[0,0,0,0,0, 0,0,0,0, 0, 0,0,0,0, 0,0,0,0,0],
-					   
-					   //[0,0,0,0,0, 0,0,0,0, 0, 0,0,0,0, 0,0,0,0,0],
-					   //[0,0,0,0,0, 0,0,0,0, 0, 0,0,0,0, 0,0,0,0,0],
-					   //[0,0,0,0,0, 0,0,0,0, 0, 0,0,0,0, 0,0,0,0,0],
-					   //[0,0,0,0,0, 0,0,0,0, 0, 0,0,0,0, 0,0,0,0,0],
-					   
-					   //[0,0,0,0,0, 0,0,0,0, 1, 0,0,0,0, 0,0,0,0,0],
-					   
-					   //[0,0,0,0,0, 0,0,0,0, 0, 0,0,0,0, 0,0,0,0,0],
-					   //[0,0,0,0,0, 0,0,0,0, 0, 0,0,0,0, 0,0,0,0,0],
-					   //[0,0,0,0,0, 0,0,0,0, 0, 0,0,0,0, 0,0,0,0,0],
-					   //[0,0,0,0,0, 0,0,0,0, 0, 0,0,0,0, 0,0,0,0,0],
-					   
-					   //[0,0,0,0,0, 0,0,0,0, 0, 0,0,0,0, 0,0,0,0,0],
-					   //[0,0,0,0,0, 0,0,0,0, 0, 0,0,0,0, 0,0,0,0,0],
-					   //[0,0,0,0,0, 0,0,0,0, 0, 0,0,0,0, 0,0,0,0,0],
-					   //[0,0,0,0,0, 0,0,0,0, 0, 0,0,0,0, 0,0,0,0,0],
-					   //[0,0,0,0,0, 0,0,0,0, 0, 0,0,0,0, 0,0,0,0,0]];
+	boardStateArray;
 
-//Timer//done
-function Clock(){
+//Timer
+function Clock() {
     //console.log("Clock called");
-    var clockInt;
-    var cl = document.getElementById("turn_clock");
-    var countSec = 0;
-    function countTimer(){ 
-        countSec++;
-        cl.innerHTML =('Time Left: ' + (21-countSec) + ' secs');
-        if(countSec> 20){
+    var clockInt,
+		cl = document.getElementById("turn_clock"),
+		countSec = 0;
+    function countTimer() {
+        countSec = countSec + 1;
+        cl.innerHTML = ('Time Left: ' + (21 - countSec) + ' secs');
+        if (countSec > 20) {
 			Turnswap();
         //cl.innerHTML =('Timer: Timed Out');
         }
     }
-    this.startTiming= function(){
+    this.startTiming = function () {
         //console.log("Clock start called");
         clockInt = setInterval(countTimer, 1000);
     }
-	this.restartTiming= function(){
+	this.restartTiming = function () {
         //console.log("Clock start called");
         clearInterval(clockInt);
-		countSec=0;
+		countSec = 0;
         clockInt = setInterval(countTimer, 1000);
     }
-    this.stopTiming= function(){
+    this.stopTiming = function () {
         clearInterval(clockInt);
-        console.log(countSec);
-        document.getElementById("turn_clock").innerHTML =('Time Left: none');
-        countSec=0;
+        //console.log(countSec);
+        document.getElementById("turn_clock").innerHTML = ('Time Left: none');
+        countSec = 0;
     }
-};
+}
 
-//board//done
-function CreateBoardArray(){
+//board
+function CreateBoardArray() {
 	boardStateArray = [bs];
-	for(var y=0; y<bss; y++){
+	for (var y=0; y<bs; y++){
 		boardStateArray[y] = [bs];
-		for(var x=0; x<bss; x++){
+		for (var x=0; x<bs; x++){
 			boardStateArray[y][x]=0;
 		}
 	}
 	boardStateArray[(bss/2)-1][(bss/2)-1] = 1;
+	console.log("bs:"+bs+", bss:"+bss);
 	PlaceToken(bss/2,bss/2,1);
 }
 function CreateGameBoard(){
@@ -112,51 +91,69 @@ function CreateGameBoard(){
     ctx.closePath();
     ctx.stroke();
 }
-//Tokens//done
+//Tokens
 function PlaceExistingTokens(){
-		for(var y = 0; y < bss; y++){
-			for(var x = 0; x < bss; x++){
+		for(var y = 0; y < bs; y++){
+			for(var x = 0; x < bs; x++){
 				if(boardStateArray[y][x]!==0){
-					PlaceToken(x,y,boardStateArray[y][x]);
+					PlaceToken(x+1,y+1,boardStateArray[y][x]);
 				}
 			}
 		}
 	}
-//mouse click//done
+
+//mouse click
 function MouseClickValidation(canvas, event) {
     var rect = canvas.getBoundingClientRect();
     var x = event.clientX - rect.left;
-    var y = event.clientY - rect.top;
-    console.log("x: " + x + " y: " + y);  
+    var y = event.clientY - rect.top; 
 	x = Math.floor(((x/Width)*bss)+0.5);
 	y = Math.floor(((y/Height)*bss)+0.5);
 	console.log("x: " + x + " y: " + y);
 	if(x > 0 && y > 0 && x < bss && y < bss){
 		//check if array at index is == 0
 		if(boardStateArray[y-1][x-1]===0){
-			if(turnTwo && player1Turn){
+	console.log("Pass as valid at x: " + x + " y: " + y);
+			if(turnTwo && isPlayer1Turn){
 				if(y<((bss/2)-3) || y>((bss/2)+3)||((y>((bss/2)-3)&&y<((bss/2)+3))&&(x<((bss/2)-3)||x>((bss/2)+3)))){
-					boardStateArray[y-1][x-1] = (isPlayer1Turn)? 1: 2;
-					PlaceToken(x,y,boardStateArray[y-1][x-1]);
-					//game state check
-					RunChecks(x-1, y-1);
-					
-					Turnswap();
 					turnTwo=false;
+					ValidTurn(x, y);
 				}
 			} else {
-				boardStateArray[y-1][x-1] = (isPlayer1Turn)? 1: 2;
-				PlaceToken(x,y,boardStateArray[y-1][x-1]);
-				//game state check
-				RunChecks(x, y);
-
-				Turnswap();	
+				ValidTurn(x, y);
 			}
 		}
 	}
 }
+//Computer
+function ComputerTurn(){
+	//window.setTimeout(null, 5000);
+	var madeValidMove = false;
+	var randX, randY;
+	do{
+		randX = Math.floor(Math.random()*bss)+1;
+		randY = Math.floor(Math.random()*bss)+1;
+		//madeValidMove = CheckValidMove(randX, randY);	
+		if(randX > 0 && randY > 0 && randX < bss && randY < bss){
+			//check if array at index is == 0
+			if(boardStateArray[randY-1][randX-1]===0){
+				madeValidMove = true;
+			}
+		}
+	} while(!madeValidMove);
+	ValidTurn(randX, randY);
+}
 
+//Turn Execution
+function ValidTurn(x, y){
+	boardStateArray[y-1][x-1] = (isPlayer1Turn)? 1: 2;
+	PlaceToken(x,y,boardStateArray[y-1][x-1]);
+	//game state check
+	RunChecks(x, y);
+	Turnswap();	
+}
 function PlaceToken(xAxis,yAxis,color){
+	//console.log(boardStateArray);
 	//x,y are center, tokens range out Math.floor((Width/20)*(2/3));
 	//Set [y][x] to corresponding color value
 	//then check state conditions
@@ -191,6 +188,9 @@ function Turnswap(){
 		isPlayer1Turn = !isPlayer1Turn;
 		TurnLabel();
 		ClockActive.restartTiming();
+		if(!isPlayer1Turn && isPlayerVsComputer){
+			ComputerTurn();
+		}
 	}
 }
 function TurnLabel(){
@@ -205,27 +205,36 @@ function TurnLabel(){
 	}
 	document.getElementById('current_player').innerHTML = name + " Turn";
 }
+
 //work-on
 function GameOver(){
 	//game over
 	var name = isPlayer1Turn? player1Name: player2Name;
+	gameOver = true;
 	document.getElementById('current_player').innerHTML = name + " is the winner!";
 	ClockActive.stopTiming();
+	//GameOverS(name);
 	
 }
-function GameOver(playerName){
+/*function GameOverS(playerName){
 	//game over
+	console.log("game has ended");
+	gameOver = true;
 	document.getElementById('current_player').innerHTML = playerName + " is the winner!";
 	ClockActive.stopTiming();
-}
+}*/
 
-//checks
+//Game State Check Execution//Check that this is actually working
 function RunChecks(x, y){
+	console.log("runchecks with x:"+x+", y:"+y);
+	x= x-1;
+	y= y-1;
 	Captures(x, y);
 	var rowAmounts = InARowCount(x, y);
 	var keepChecking = true;
-	keepChecking = FiveInARow(rowAmounts);
+	keepChecking = FiveOrMoreInARow(rowAmounts);
 	//set text box to empty
+	document.getElementById(isPlayer1Turn?"player1_callouts":"player2_callouts").innerHTML = "";
 	if(keepChecking){
 		keepChecking = FourInARow(x,y, rowAmounts);
 		if(keepChecking){
@@ -233,10 +242,11 @@ function RunChecks(x, y){
 		}
 	}
 }
-//add board clear
+//Check for captures
 function Captures(x, y){ //Captures Logic
 	var spotVal = boardStateArray[y][x];
-	if (x+3<bss && boardStateArray[y][x+1] !== spotVal && array[y][x+2] !== spotVal && array[y][x+3] === spotVal){
+	var enemyVal = (isPlayer1Turn)?2:1;
+	if (x+3<bs && boardStateArray[y][x+1] === enemyVal && boardStateArray[y][x+2] === enemyVal && boardStateArray[y][x+3] === spotVal){
 		//valid
 		boardStateArray[y][x+1] = 0;
 		boardStateArray[y][x+2] = 0;
@@ -247,7 +257,7 @@ function Captures(x, y){ //Captures Logic
 			player2Captures=player2Captures+2;
 		}
 	}
-	if ((x+3<bss &&y+3<bss)&& array[y+1][x+1] !== spotVal  && array[y+2][x+2] !== spotVal && array[y+3][x+3] === spotVal){
+	if ((x+3<bs &&y+3<bs)&& boardStateArray[y+1][x+1] === enemyVal  && boardStateArray[y+2][x+2] === enemyVal && boardStateArray[y+3][x+3] === spotVal){
 		//valid
 		boardStateArray[y+1][x+1] = 0;
 		boardStateArray[y+2][x+2] = 0;
@@ -258,7 +268,7 @@ function Captures(x, y){ //Captures Logic
 			player2Captures=player2Captures+2;
 		}
 	}
-	if (y+3<bss && boardStateArray[y+1][x] !== spotVal && boardStateArray[y+2][x] !== spotVal && boardStateArray[y+3][x] == spotVal){
+	if (y+3<bs && boardStateArray[y+1][x] === enemyVal && boardStateArray[y+2][x] === enemyVal && boardStateArray[y+3][x] == spotVal){
 		//valid
 		boardStateArray[y+1][x] = 0;
 		boardStateArray[y+2][x] = 0;
@@ -269,7 +279,7 @@ function Captures(x, y){ //Captures Logic
 			player2Captures=player2Captures+2;
 		}
 	}
-	if ((x-3>-1 &&y+3<bss)&& boardStateArray[y+1][x-1] !== spotVal && boardStateArray[y+2][x-2] !== spotVal && boardStateArray[y+3][x-3] === spotVal){
+	if ((x-3>-1 &&y+3<bs)&& boardStateArray[y+1][x-1] === enemyVal && boardStateArray[y+2][x-2] === enemyVal && boardStateArray[y+3][x-3] === spotVal){
 		//valid
 		boardStateArray[y+1][x-1] = 0;
 		boardStateArray[y+2][x-2] = 0;
@@ -280,7 +290,7 @@ function Captures(x, y){ //Captures Logic
 			player2Captures=player2Captures+2;
 		}
 	}
-	if (x-3>-1 && boardStateArray[y][x-1] !== spotVal && boardStateArray[y][x-2] !== spotVal && boardStateArray[y][x-3] === spotVal){
+	if (x-3>-1 && boardStateArray[y][x-1] === enemyVal && boardStateArray[y][x-2] === enemyVal && boardStateArray[y][x-3] === spotVal){
 		//valid
 		boardStateArray[y][x-1] = 0;
 		boardStateArray[y][x-2] = 0;
@@ -291,7 +301,7 @@ function Captures(x, y){ //Captures Logic
 			player2Captures=player2Captures+2;
 		}
 	}
-	if ((x-3>-1 &&y-3>-1)&& boardStateArray[y-1][x-1] !== spotVal && boardStateArray[y-2][x-2] !== spotVal && boardStateArray[y-3][x-3] === spotVal){
+	if ((x-3>-1 &&y-3>-1)&& boardStateArray[y-1][x-1] === enemyVal && boardStateArray[y-2][x-2] === enemyVal && boardStateArray[y-3][x-3] === spotVal){
 		//valid
 		boardStateArray[y-1][x-1] = 0;
 		boardStateArray[y-2][x-2] = 0;
@@ -302,7 +312,7 @@ function Captures(x, y){ //Captures Logic
 			player2Captures=player2Captures+2;
 		}
 	}
-	if (y-3>-1 && boardStateArray[y-1][x] !== spotVal && boardStateArray[y-2][x] !== spotVal && boardStateArray[y-3][x] === spotVal){
+	if (y-3>-1 && boardStateArray[y-1][x] === enemyVal && boardStateArray[y-2][x] === enemyVal && boardStateArray[y-3][x] === spotVal){
 		//valid
 		boardStateArray[y-1][x] = 0;
 		boardStateArray[y-2][x] = 0;
@@ -313,7 +323,7 @@ function Captures(x, y){ //Captures Logic
 			player2Captures=player2Captures+2;
 		}
 	}
-	if ((x+3<bss &&y-3>-1)&& boardStateArray[y-1][x+1] !== spotVal && boardStateArray[y-2][x+2] !== spotVal && boardStateArray[y-3][x+3] === spotVal){
+	if ((x+3<bs &&y-3>-1)&& boardStateArray[y-1][x+1] === enemyVal && boardStateArray[y-2][x+2] === enemyVal && boardStateArray[y-3][x+3] === spotVal){
 		//valid
 		boardStateArray[y-1][x+1] = 0;
 		boardStateArray[y-2][x+2] = 0;
@@ -324,27 +334,30 @@ function Captures(x, y){ //Captures Logic
 			player2Captures=player2Captures+2;
 		}
 	}
+	//Up date captures text
+	document.getElementById(isPlayer1Turn?"player1_captures":"player2_captures").innerHTML = (isPlayer1Turn?player1Captures:player2Captures);
+
 	//clear canvas
-	canvas.clearRect(0, 0, canvas.width, canvas.height);
+	//canvas.clearRect(0, 0, canvas.width, canvas.height);
+	ctx.clearRect(0, 0, Width, Height);
 	//refill board
 	CreateGameBoard();
 	PlaceExistingTokens();
 	
 	//game over
-	if(player1Capture >= 10){
-		GameOver(player1Name);
-	}else if(player2Capture >= 10){
-		GameOver(player2Name);
+	if((isPlayer1Turn?player1Captures:player2Captures) >= 10){
+		GameOver();//S(player1Name));
 	}
 }
-
+//Check for Amounts in a row
 function InARowCount(x, y){
 	//Five in a row
-	var amountOnRow = [[0,0,0], [0,0,0], [0,0,0], [0,0,0]];
+	var spotVal = boardStateArray[y][x];
+	var amountOnRow = [[1,0,0], [1,0,0], [1,0,0], [1,0,0]];
 	//horizontal
 	var count = 1;
 	while(count<5){
-		if(x+count<bss && array[y][x+count] === array[y][x]){
+		if(x+count<bs && boardStateArray[y][x+count] === spotVal){
 			amountOnRow[0][0]+=1;
 			count+=1;
 		} else {
@@ -354,7 +367,7 @@ function InARowCount(x, y){
 	}
 	count = 1;
 	while(count<5){
-		if(x-count>-1 && array[y][x-count] === array[y][x]){
+		if(x-count>-1 && boardStateArray[y][x-count] === spotVal){
 			amountOnRow[0][0]+=1;
 			count+=1;
 		} else {
@@ -365,7 +378,7 @@ function InARowCount(x, y){
 	//vertical
 	count = 1;
 	while(count<5){
-		if(y+count<bss && array[y+count][x] === array[y][x]){
+		if(y+count<bs && boardStateArray[y+count][x] === spotVal){
 			amountOnRow[1][0]+=1;
 			count+=1;
 		} else {
@@ -375,7 +388,7 @@ function InARowCount(x, y){
 	}
 	count = 1;
 	while(count<5){
-		if(y-count>-1 && array[y-count][x] === array[y][x]){
+		if(y-count>-1 && boardStateArray[y-count][x] === spotVal){
 			amountOnRow[1][0]+=1;
 			count+=1;
 		} else {
@@ -386,7 +399,7 @@ function InARowCount(x, y){
 	//Diagonal up
 	count = 1;
 	while(count<5){
-		if((x+count<bss &&y-count>-1) && array[y-count][x+count] === array[y][x]){
+		if((x+count<bs &&y-count>-1) && boardStateArray[y-count][x+count] === spotVal){
 			amountOnRow[2][0]+=1;
 			count+=1;
 		} else {
@@ -396,7 +409,7 @@ function InARowCount(x, y){
 	}
 	count = 1;
 	while(count<5){
-		if((x-count>-1 && y+count<bss) && array[y+count][x-count] === array[y][x]){
+		if((x-count>-1 && y+count<bs) && boardStateArray[y+count][x-count] === spotVal){
 			amountOnRow[2][0]+=1;
 			count+=1;
 		} else {
@@ -407,7 +420,7 @@ function InARowCount(x, y){
 	//Diagonal down
 	count = 1;
 	while(count<5){
-		if((y+count<bss &&x-count>-1) && array[y+count][x-count] ===array[y][x]){
+		if((y+count<bs &&x+count<bs) && boardStateArray[y+count][x+count] === spotVal){
 			amountOnRow[3][0]+=1;
 			count+=1;
 		} else {
@@ -417,7 +430,7 @@ function InARowCount(x, y){
 	}
 	count = 1;
 	while(count<5){
-		if((y-count>-1 && x+count<bss) && array[y-count][x+count] ===array[y][x]){
+		if((y-count>-1 && x-count>-1) && boardStateArray[y-count][x-count] === spotVal){
 			amountOnRow[3][0]+=1;
 			count+=1;
 		} else {
@@ -427,34 +440,94 @@ function InARowCount(x, y){
 	}
 	return amountOnRow;
 }
-
-function FiveInARow(amountOnRow){
-	if(amountOnRow[0]===5||amountOnRow[1]===5||amountOnRow[2]===5||amountOnRow[3]===5){
+function FiveOrMoreInARow(amountOnRow){
+	if(amountOnRow[0][0] >= 5|| amountOnRow[1][0] >= 5|| amountOnRow[2][0] >= 5|| amountOnRow[3][0] >= 5){
 		GameOver();
 		return false;
 	} else {
 		return true;
 	}
 }
-//finish etiquette logic
 function FourInARow(x, y, amountOnRow){
-	if(amountOnRow[0]==4){
-		//check to left and right
-	}else if(amountOnRow[1]==4){
-	}else if(amountOnRow[2]==4){
-	}else if(amountOnRow[3]==4){
+	//var enemyVal = isPlayer1Turn?2:1;
+	var amount1 = 0, amount2 = 0, hasATessera = false;
+	if(amountOnRow[0][0] === 4){
+		amount1 = amountOnRow[0][1]+1;
+		amount2 = amountOnRow[0][2]+1;
+		if((x + amount1 < bs && boardStateArray[y][x+amount1] === 0) || 
+		   (x - amount2 >-1 && boardStateArray[y][x-amount2] === 0)||
+		   (x + amount1 === bs && (x - amount2 > -1 && boardStateArray[y][x-amount2] === 0))||
+		   (x - amount2 === -1 && (x + amount1 < bs && boardStateArray[y][x+amount1] === 0))){
+			hasATessera = true;
+		}
+	}else if(amountOnRow[1][0] === 4){
+		amount1 = amountOnRow[1][1]+1;
+		amount2 = amountOnRow[1][2]+1;
+		if((y + amount1 < bs && boardStateArray[y+amount1][x] === 0) || 
+		   (y - amount2 > -1 && boardStateArray[y-amount2][x] === 0)||
+		   (y + amount1 === bs && (y - amount2 >-1 && boardStateArray[y-amount2][x] === 0))||
+		   (y - amount2 === -1 && (y + amount1 < bs && boardStateArray[y+amount1][x] === 0))){
+			hasATessera = true;
+		}
+	}else if(amountOnRow[2][0] === 4){
+		amount1 = amountOnRow[2][1]+1;
+		amount2 = amountOnRow[2][2]+1;
+		if(((y-amount1>-1 && x+amount1<bs) && boardStateArray[y-amount1][x+amount1] === 0)||
+		   ((y+amount2<bs && x-amount2>-1) && boardStateArray[y+amount2][x-amount2] === 0)||
+		   ((y-amount1 === -1 && x+amount1 === bs) && ((y+amount2<bs && x-amount2>-1) && boardStateArray[y+amount2][x-amount2] === 0))||
+		   ((y+amount2 === bs && x-amount2 === -1) && ((y-amount1>-1 && x+amount1<bs) && boardStateArray[y-amount1][x+amount1] === 0))){
+			hasATessera = true;
+		}
+	}else if(amountOnRow[3][0] === 4){
+		amount1 = amountOnRow[3][1]+1;
+		amount2 = amountOnRow[3][2]+1;
+		if(((y+amount1 < bs && x+amount1 < bs) && boardStateArray[y+amount1][x+amount1] === 0)||
+		   ((y-amount2 > -1 && x-amount2 > -1) && boardStateArray[y-amount2][x-amount2] === 0)||
+		   ((y+amount1 === bs && x+amount1 === bs) && ((y-amount2 > -1 && x-amount2 > -1) && boardStateArray[y-amount2][x-amount2] === 0))||
+		   ((y-amount2 === -1 && x-amount2 === -1) && ((y+amount1 < bs && x+amount1 < bs) && boardStateArray[y+amount1][x+amount1] === 0))){
+			hasATessera = true;
+		}
 	}
+	if(hasATessera){
+		document.getElementById(isPlayer1Turn?"player1_callouts":"player2_callouts").innerHTML = "Tessera";
+	}
+	
+	return !hasATessera;
 }
 function ThreeInARow(x, y, amountOnRow){
-	if(amountOnRow[0]==3){
-
-	}else if(amountOnRow[1]==3){
-	}else if(amountOnRow[2]==3){
-	}else if(amountOnRow[3]==3){
+	var amount1 = 0, amount2 = 0, hasATrie = false;
+	if(amountOnRow[0][0] === 3){
+		amount1 = amountOnRow[0][1]+1;
+		amount2 = amountOnRow[0][2]+1;
+		if((x + amount1 < bs && x - amount2 >-1) && (boardStateArray[y][x+amount1] === 0 && boardStateArray[y][x-amount2] === 0)){
+			hasATrie = true;
+		}
+	}else if(amountOnRow[1][0] === 3){
+		amount1 = amountOnRow[1][1]+1;
+		amount2 = amountOnRow[1][2]+1;
+		if((y + amount1 < bs && y - amount2 >-1) && (boardStateArray[y+amount1][x] === 0 && boardStateArray[y-amount2][x] === 0)){
+			hasATrie = true;
+		}
+	}else if(amountOnRow[2][0] === 3){
+		amount1 = amountOnRow[2][1]+1;
+		amount2 = amountOnRow[2][2]+1;
+		if(((x+amount1<bs &&y-amount1>-1) && boardStateArray[y-amount1][x+amount1] === 0)&&((y+amount2>-1 && x-amount2<bs) && boardStateArray[y+amount2][x-amount2] === 0)){
+			hasATrie = true;
+		}
+	}else if(amountOnRow[3][0] === 3){
+		amount1 = amountOnRow[3][1]+1;
+		amount2 = amountOnRow[3][2]+1;
+		if(((y+amount1<bs &&x+amount1<bs) && boardStateArray[y+amount1][x+amount1] === 0)&&((y-amount2>-1 && x-amount2>-1) && boardStateArray[y-amount2][x-amount2] === 0)){
+			hasATrie = true;
+		}
+	}
+	
+	if(hasATrie){
+		document.getElementById(isPlayer1Turn?"player1_callouts":"player2_callouts").innerHTML = "Trie";
 	}
 }
 
-//Conversions//done
+//Conversions
 function ConvertLinkToName(link) {
 	//It returns the symbol from the hex value preceded by a %.
 	var tempS = "";
@@ -483,7 +556,7 @@ function SaveGame(){
 	var filePath = "pente.txt";
 	SaveGame(filePath);
 }
-function SaveGame(filePath){
+function SaveGameF(filePath){
 	//pause/stop clock
 	//ClockActive.stopTiming();
 	//import System.IO;
@@ -523,29 +596,9 @@ function SaveGame(filePath){
 	//when they return restart timer
 	//ClockActive.startTiming();
 }
-//done
-function NewGame(vars){
-    //set player 1 & 2's names, change computer bool
-	isPlayerVsComputer = (vars.c) ? vars.c === "t" : true;
-	player1Name = (vars.p1) ? vars.p1 : "Player 1";
-	player2Name = (vars.p2) ? vars.p2 : (isPlayerVsComputer) ? "Computer" : "Player 2";
-	console.log(isPlayerVsComputer,player1Name,player2Name);
-	
-    TurnLabel();
-	
-	bs = (vars.bs)?parseInt(vars.bs): bs, 
-	bss = bs+1;
-	
-	CreateGameBoard();
-	CreateBoardArray();
-	
-	canvas.addEventListener('mousedown', function(evt) {
-		MouseClickValidation(canvas, evt);
-	});
-	ClockActive.startTiming();
-	Turnswap();
-}
 //work-on
+//check for file existance
+//Just need to add file name
 function ReadFromFile(filePath){
 	/// read from file
 //function ReadFile(filepathIncludingFileName : String) {
@@ -602,6 +655,11 @@ function LoadGame(filePath){
 	gameOver = vars.gameOver === "true";
 	isPlayer1Turn = vars.isPlayer1Turn === "true";
 	
+	player1Captures = vars.player1Captures;
+	player2Captures = vars.player2Captures;
+	document.getElementById("player1_captures").innerHTML = player1Captures;	
+	document.getElementById("player2_captures").innerHTML = player2Captures;
+	
 	boardStateArray = vars.boardStateArray;
 	
 	bs = (vars.bs)?parseInt(vars.bs): bs;
@@ -610,7 +668,7 @@ function LoadGame(filePath){
 	PlaceExistingTokens();
 	
     if(gameOver){
-		GameOver(isPlayer1Turn?player1Name:player2Name);
+		GameOver();//S(isPlayer1Turn?player1Name:player2Name);
 	} else {
 		TurnLabel();
 		ClockActive.startTiming();
@@ -620,8 +678,28 @@ function LoadGame(filePath){
 	}
 }
 
-//check for file existance
-//Just need to add file name
+//Starting a new game
+function NewGame(vars){
+    //set player 1 & 2's names, change computer bool
+	isPlayerVsComputer = (vars.c) ? vars.c === "t" : true;
+	player1Name = (vars.p1) ? vars.p1 : "Player 1";
+	player2Name = (vars.p2) ? vars.p2 : (isPlayerVsComputer) ? "Computer" : "Player 2";
+	console.log(isPlayerVsComputer,player1Name,player2Name);
+	
+    TurnLabel();
+	
+	bs = (vars.bs)?parseInt(vars.bs): bs, 
+	bss = bs+1;
+	
+	CreateGameBoard();
+	CreateBoardArray();
+	
+	canvas.addEventListener('mousedown', function(evt) {
+		MouseClickValidation(canvas, evt);
+	});
+	ClockActive.startTiming();
+	Turnswap();
+}
 
 function SetUpGame() {
 	ClockActive = new Clock();
@@ -629,6 +707,7 @@ function SetUpGame() {
 	ctx = canvas.getContext('2d');
 	Height = canvas.height;
 	Width = canvas.width;
+	//add dave and download button connections
 	
 	var vars = {},
         parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function (n, key, value) {
