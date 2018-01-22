@@ -325,7 +325,7 @@ function Captures(x, y){ //Captures Logic
 		}
 	}
 	//clear canvas
-	
+	canvas.clearRect(0, 0, canvas.width, canvas.height);
 	//refill board
 	CreateGameBoard();
 	PlaceExistingTokens();
@@ -479,11 +479,11 @@ function ConvertNameToLink(name) {
 }
 
 //make functional//check that read and write to file work
-function saveGame(){
+function SaveGame(){
 	var filePath = "pente.txt";
-	saveGame(filePath);
+	SaveGame(filePath);
 }
-function saveGame(filePath){
+function SaveGame(filePath){
 	//pause/stop clock
 	//ClockActive.stopTiming();
 	//import System.IO;
@@ -590,7 +590,7 @@ try {
 //transferFromUrl
 return vars;
 }
-function loadGame(filePath){
+function LoadGame(filePath){
 	var vars = ReadFromFile(filePath);
 	//read file
 	
@@ -636,7 +636,7 @@ function SetUpGame() {
             vars[key] = value;
         });
 	if (vars.state && vars.state === 'load') {
-		loadGame(vars.fileName);		
+		LoadGame(vars.fileName);		
 	} else {
 		NewGame(vars);	
 	}
