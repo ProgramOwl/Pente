@@ -95,44 +95,53 @@ function CreateGameBoard(){
 //Players
 //mouse click
 function MouseClickValidation(canvas, event) {
-    var rect = canvas.getBoundingClientRect();
-    var x = event.clientX - rect.left;
-    var y = event.clientY - rect.top; 
-	x = Math.floor(((x/Width)*bss)+0.5);
-	y = Math.floor(((y/Height)*bss)+0.5);
-	console.log("x: " + x + " y: " + y);
-	if(x > 0 && y > 0 && x < bss && y < bss){
-		//check if array at index is == 0
-		if(boardStateArray[y-1][x-1]===0){
-	console.log("Pass as valid at x: " + x + " y: " + y);
-			if(turnTwo && isPlayer1Turn){
-				if(y<((bss/2)-3) || y>((bss/2)+3)||((y>((bss/2)-3)&&y<((bss/2)+3))&&(x<((bss/2)-3)||x>((bss/2)+3)))){
-					turnTwo=false;
+	if(!gameOver){
+		var rect = canvas.getBoundingClientRect();
+		var x = event.clientX - rect.left;
+		var y = event.clientY - rect.top; 
+		x = Math.floor(((x/Width)*bss)+0.5);
+		y = Math.floor(((y/Height)*bss)+0.5);
+		console.log("x: " + x + " y: " + y);
+		if(x > 0 && y > 0 && x < bss && y < bss){
+			//check if array at index is == 0
+			if(boardStateArray[y-1][x-1]===0){
+		console.log("Pass as valid at x: " + x + " y: " + y);
+				if(turnTwo && isPlayer1Turn){
+					if(y<((bss/2)-3) || y>((bss/2)+3)||((y>((bss/2)-3)&&y<((bss/2)+3))&&(x<((bss/2)-3)||x>((bss/2)+3)))){
+						turnTwo=false;
+						ValidTurn(x, y);
+					}
+				} else {
 					ValidTurn(x, y);
 				}
-			} else {
-				ValidTurn(x, y);
 			}
 		}
 	}
 }
 //Computer
 function ComputerTurn(){
-	//window.setTimeout(null, 5000);
-	var madeValidMove = false;
-	var randX, randY;
-	do{
-		randX = Math.floor(Math.random()*bss)+1;
-		randY = Math.floor(Math.random()*bss)+1;
-		//madeValidMove = CheckValidMove(randX, randY);	
-		if(randX > 0 && randY > 0 && randX < bss && randY < bss){
-			//check if array at index is == 0
-			if(boardStateArray[randY-1][randX-1]===0){
-				madeValidMove = true;
+	if(!gameOver){
+		//window.setTimeout(null, 5000);
+		var madeValidMove = false;
+		var randX, randY;
+		do{
+			randX = Math.floor(Math.random()*bss)+1;
+			randY = Math.floor(Math.random()*bss)+1;
+			//madeValidMove = CheckValidMove(randX, randY);	
+			if(randX > 0 && randY > 0 && randX < bss && randY < bss){
+				//check if array at index is == 0
+				if(boardStateArray[randY-1][randX-1]===0){
+					madeValidMove = true;
+				}
 			}
+		} while(!madeValidMove);
+		ValidTurn(randX, randY);
+		var point = {
+			x: randX,
+			y: randY
 		}
-	} while(!madeValidMove);
-	ValidTurn(randX, randY);
+		return point;
+	}
 }
 
 //Turn Execution
@@ -154,32 +163,32 @@ function PlaceExistingTokens(){
 		}
 	}
 function PlaceToken(xAxis,yAxis,color){
-	//console.log(boardStateArray);
-	//x,y are center, tokens range out Math.floor((Width/20)*(2/3));
-	//Set [y][x] to corresponding color value
-	//then check state conditions
-	var canvas = document.getElementById('our_canvas');
-	var context = canvas.getContext('2d');
-	var axisX = Math.floor((Width/bss)*xAxis),
-		axisY = Math.floor((Height/bss)*yAxis),
-		r = Math.floor((((Width<=Height?Width:Height)/bss)/2)-0.5),
-		grd;
-	
-      context.beginPath();
-      context.arc(axisX,  axisY, r, 0, 2 * Math.PI, false);
-      context.closePath();
+		//console.log(boardStateArray);
+		//x,y are center, tokens range out Math.floor((Width/20)*(2/3));
+		//Set [y][x] to corresponding color value
+		//then check state conditions
+		var canvas = document.getElementById('our_canvas');
+		var context = canvas.getContext('2d');
+		var axisX = Math.floor((Width/bss)*xAxis),
+			axisY = Math.floor((Height/bss)*yAxis),
+			r = Math.floor((((Width<=Height?Width:Height)/bss)/2)-0.5),
+			grd;
 
-	if (color === 1) { // black token
-		grd = context.createRadialGradient(Math.floor(axisX + r/5), Math.floor(axisY + r/5), r, axisX, axisY, Math.floor(r*1.6));
-		grd.addColorStop(0, '#222');
-		grd.addColorStop(1, '#FFF');		
-	} else { // white token
-		var grd = context.createRadialGradient( Math.floor(axisX - r/5),  Math.floor(axisY - r/5), r,  axisX,  axisY, Math.floor(r*1.6));
-		grd.addColorStop(0, '#FFF');
-		grd.addColorStop(1, '#000');
-	}
-	context.fillStyle = grd;
-	context.fill();
+		  context.beginPath();
+		  context.arc(axisX,  axisY, r, 0, 2 * Math.PI, false);
+		  context.closePath();
+
+		if (color === 1) { // black token
+			grd = context.createRadialGradient(Math.floor(axisX + r/5), Math.floor(axisY + r/5), r, axisX, axisY, Math.floor(r*1.6));
+			grd.addColorStop(0, '#222');
+			grd.addColorStop(1, '#FFF');		
+		} else { // white token
+			var grd = context.createRadialGradient( Math.floor(axisX - r/5),  Math.floor(axisY - r/5), r,  axisX,  axisY, Math.floor(r*1.6));
+			grd.addColorStop(0, '#FFF');
+			grd.addColorStop(1, '#000');
+		}
+		context.fillStyle = grd;
+		context.fill();
 }
 
 //Switching Player
