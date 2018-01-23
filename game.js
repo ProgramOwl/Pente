@@ -590,6 +590,7 @@ function SaveGameF(filePath){
 	file.writeln("&gameOver:"+gameOver);
 	file.writeln("&boardStateArray:"+boardStateArray);
 	file.close();
+	
 	/*
 	import System.IO;
 	import System;  // Used for getting the date
@@ -665,6 +666,9 @@ function LoadGame(filePath){
 	player1Name = vars.player1Name;
 	player2Name = vars.player2Name;
 	console.log(isPlayerVsComputer, player1Name, player2Name);
+	document.getElementById("player1").innerHTML = player1Name;
+	document.getElementById("player2").innerHTML = player2Name;
+	
 	turnTwo = vars.turnTwo;
 	gameOver = vars.gameOver === "true";
 	isPlayer1Turn = vars.isPlayer1Turn === "true";
@@ -698,6 +702,8 @@ function NewGame(vars){
 	player1Name = (vars.p1) ? vars.p1 : "Player 1";
 	player2Name = (vars.p2) ? vars.p2 : (isPlayerVsComputer) ? "Computer" : "Player 2";
 	console.log(isPlayerVsComputer,player1Name,player2Name);
+	document.getElementById("player1").innerHTML = player1Name;
+	document.getElementById("player2").innerHTML = player2Name;
 	
     TurnLabel();
 	
