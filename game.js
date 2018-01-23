@@ -45,7 +45,7 @@ function Clock() {
     }
 }
 
-//board
+//Game Board
 function CreateBoardArray() {
 	boardStateArray = [bs];
 	for (var y=0; y<bs; y++){
@@ -91,17 +91,8 @@ function CreateGameBoard(){
     ctx.closePath();
     ctx.stroke();
 }
-//Tokens
-function PlaceExistingTokens(){
-		for(var y = 0; y < bs; y++){
-			for(var x = 0; x < bs; x++){
-				if(boardStateArray[y][x]!==0){
-					PlaceToken(x+1,y+1,boardStateArray[y][x]);
-				}
-			}
-		}
-	}
 
+//Players
 //mouse click
 function MouseClickValidation(canvas, event) {
     var rect = canvas.getBoundingClientRect();
@@ -152,6 +143,16 @@ function ValidTurn(x, y){
 	RunChecks(x, y);
 	Turnswap();	
 }
+//Tokens
+function PlaceExistingTokens(){
+		for(var y = 0; y < bs; y++){
+			for(var x = 0; x < bs; x++){
+				if(boardStateArray[y][x]!==0){
+					PlaceToken(x+1,y+1,boardStateArray[y][x]);
+				}
+			}
+		}
+	}
 function PlaceToken(xAxis,yAxis,color){
 	//console.log(boardStateArray);
 	//x,y are center, tokens range out Math.floor((Width/20)*(2/3));
@@ -181,21 +182,21 @@ function PlaceToken(xAxis,yAxis,color){
 	context.fill();
 }
 
-//work-on
+//Switching Player
 function Turnswap(){
 	//if not gameover
 	if(!gameOver){
 		isPlayer1Turn = !isPlayer1Turn;
-		TurnLabel();
+		TurnLabel(isPlayer1Turn? player1Name: player2Name);
 		ClockActive.restartTiming();
 		if(!isPlayer1Turn && isPlayerVsComputer){
 			ComputerTurn();
 		}
 	}
 }
-function TurnLabel(){
-	var name = isPlayer1Turn? player1Name: player2Name;
-	var tempS=name;
+function TurnLabel(name){
+	var names = name+"";
+	var tempS = names;
 	tempS = tempS.replace(/\s{1,}/g, '');
 	var lastChar = tempS.substr(tempS.length -1);
 	if(lastChar ==='s' || lastChar ==='S'){
@@ -204,6 +205,7 @@ function TurnLabel(){
 		name = name+"'s";
 	}
 	document.getElementById('current_player').innerHTML = name + " Turn";
+	return name;
 }
 
 //work-on
@@ -224,7 +226,8 @@ function GameOver(){
 	ClockActive.stopTiming();
 }*/
 
-//Game State Check Execution//Check that this is actually working
+//Game State Check Execution
+//Check that this is actually working
 function RunChecks(x, y){
 	console.log("runchecks with x:"+x+", y:"+y);
 	x= x-1;
@@ -232,11 +235,11 @@ function RunChecks(x, y){
 	Captures(x, y);
 	var rowAmounts = InARowCount(x, y);
 	var keepChecking = true;
-	keepChecking = FiveOrMoreInARow(rowAmounts);
+	keepChecking = !FiveOrMoreInARow(rowAmounts);
 	//set text box to empty
 	document.getElementById(isPlayer1Turn?"player1_callouts":"player2_callouts").innerHTML = "";
 	if(keepChecking){
-		keepChecking = FourInARow(x,y, rowAmounts);
+		keepChecking = !FourInARow(x,y, rowAmounts);
 		if(keepChecking){
 			ThreeInARow(x,y, rowAmounts);
 		}
@@ -443,9 +446,9 @@ function InARowCount(x, y){
 function FiveOrMoreInARow(amountOnRow){
 	if(amountOnRow[0][0] >= 5|| amountOnRow[1][0] >= 5|| amountOnRow[2][0] >= 5|| amountOnRow[3][0] >= 5){
 		GameOver();
-		return false;
-	} else {
 		return true;
+	} else {
+		return false;
 	}
 }
 function FourInARow(x, y, amountOnRow){
@@ -492,7 +495,7 @@ function FourInARow(x, y, amountOnRow){
 		document.getElementById(isPlayer1Turn?"player1_callouts":"player2_callouts").innerHTML = "Tessera";
 	}
 	
-	return !hasATessera;
+	return hasATessera;
 }
 function ThreeInARow(x, y, amountOnRow){
 	var amount1 = 0, amount2 = 0, hasATrie = false;
@@ -525,6 +528,7 @@ function ThreeInARow(x, y, amountOnRow){
 	if(hasATrie){
 		document.getElementById(isPlayer1Turn?"player1_callouts":"player2_callouts").innerHTML = "Trie";
 	}
+	return  hasATrie;
 }
 
 //Conversions
@@ -551,6 +555,7 @@ function ConvertNameToLink(name) {
 	return name;
 }
 
+//Game Configuration and Recording
 //make functional//check that read and write to file work
 function SaveGame(){
 	var filePath = "pente.txt";
@@ -677,7 +682,6 @@ function LoadGame(filePath){
 			});	
 	}
 }
-
 //Starting a new game
 function NewGame(vars){
     //set player 1 & 2's names, change computer bool
@@ -701,6 +705,7 @@ function NewGame(vars){
 	Turnswap();
 }
 
+//Page Startup
 function SetUpGame() {
 	ClockActive = new Clock();
 	canvas = document.getElementById('our_canvas');
