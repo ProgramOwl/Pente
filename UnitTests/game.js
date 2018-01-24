@@ -27,28 +27,130 @@ function UnitTestCreateBoardArray(){
 //Players
 function UnitTestMouseClickValidation(){//canvas, event
 	//gets the mouses current position on the canvas, checks if it is a valid move, if so then it calls ValidTurn(x, y)
+	var valid = false;
+	turnTwo = false;
+	isPlayer1Turn = false;
+	var rect = canvas.getBoundingClientRect();
+	var x = -2;
+	var y = -2; 
+	x = Math.floor(((x/Width)*bss)+0.5);
+	y = Math.floor(((y/Height)*bss)+0.5);
+	if(x > 0 && y > 0 && x < bss && y < bss){
+		valid = true;
+		if(boardStateArray[y-1][x-1]===0){
+			if(turnTwo && isPlayer1Turn){
+				if(y<((bss/2)-3) || y>((bss/2)+3)||((y>((bss/2)-3)&&y<((bss/2)+3))&&(x<((bss/2)-3)||x>((bss/2)+3)))){
+					turnTwo=false;
+					valid = true;
+				}
+				else {
+					valid = false;
+				}
+			} else {
+				valid = true;
+			}
+		} else {
+			valid = false;
+		}
+	} else {
+		valid = false;
+	}
+	if(valid) {
+		console.log("Click Validation is Valid");
+	} else {
+		console.log("Click Validation is Not Valid");
+	}
 }
 function UnitTestComputerTurn(){
 	//generates a random point and does so untill it finds a valid one, then is calls ValidTurn(x, y)
+	var valid = false;
+	ComputerTurn();
+	if(randX > 0 && randY > 0 && randX < bss && randY < bss){
+		valid = true;
+		if(boardStateArray[randY-1][randX-1]===0){
+			valid = true;
+		} else {
+			valid = false;
+		}
+	} else {
+		valid = false;
+	}
+	if(valid) {
+		console.log("Computer Turn is Valid");
+	} else {
+		console.log("Computer Turn is Not Valid");
+	}
 }
 //Switching player
 function UnitTestTurnSwap(){
 	//resets the clock, swaps players and calls TurnLabel
+	isPlayer1Turn = true;
+	var valid = false;
+	Turnswap();
+	if(isPlayer1Turn == false) {
+		valid = true;
+	}
+	if(valid) {
+		console.log("Turn Swap is Valid");
+	} else {
+		console.log("Turn Swap is Not Valid");
+	}
 }
 function UnitTestTurnLabel(){//name
 	//updates the current turn label text, returns name factor
 	//checks if name ends in s such as to properly position ' 
 	//Ex.console.log("Sam's" === TurnLabel("Sam"));	
 	//Ex.console.log("Owls'" === TurnLabel("Owls"));
+	var valid = false;
+	TurnLabel("Krebs");
+	if(name == "Krebs'") {
+		valid = true;
+	} else {
+		valid = false;
+	}
+	if(valid) {
+		console.log("Turn Label is Valid");
+	} else {
+		console.log("Turn Label is Not Valid");
+	}
 }
 function UnitTestGameOver(){
 	//sets gameOver to true and displays winner
 	//check that gameOver is true and that the winner is right, based upon isPlayer1Turn
+	player1Name = "Mark";
+	isPlayer1Turn = true;
+	gameOver = false;
+	var valid = true;
+	gameOver();
+	var endName = document.getElementById('current_player').innerHTML
+	if(gameOver) {
+		if(endName == "Mark is the winner!") {
+			valid = true;
+		} else {
+			valid = false;
+		}
+	} else {
+		valid = false;
+	}
+	if(valid) {
+		console.log("Game Over is Valid");
+	} else {
+		console.log("Game Over is Not Valid");
+	}
 }
 //Checking game conditions
 function UnitTestCaptures(){//x, y
 	//sets gameOver to true and displays winner
 	//(check array after)
+	isPlayer1Turn = true;
+	player1Captures = 10;
+	var valid = true;
+	Captures(3, 2);
+	if(gameOver) {
+		valid = true;
+	} else {
+		valid = false;
+	}
 }
 function UnitTestInARowCount(){//x, y
 	//returns Array , i.e. rowAmounts

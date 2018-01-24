@@ -59,9 +59,9 @@ function CreateBoardArray() {
 	PlaceToken(bss/2,bss/2,1);
 }
 function CreateGameBoard(){
-		ctx.rect(canvas.width/bss, canvas.height/bss, canvas.width-(canvas.width/(bss/2)), canvas.height-(canvas.height/(bss/2)));
-		ctx.fillStyle = '#CD8646';
-      ctx.fill();
+	ctx.rect(canvas.width/bss, canvas.height/bss, canvas.width-(canvas.width/(bss/2)), canvas.height-(canvas.height/(bss/2)));
+	ctx.fillStyle = '#CD8646';
+    ctx.fill();
     ctx.lineWidth = 2;
     ctx.strokeStyle = "#46444C";
 		
