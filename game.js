@@ -59,9 +59,9 @@ function CreateBoardArray() {
 	PlaceToken(bss/2,bss/2,1);
 }
 function CreateGameBoard(){
-		ctx.rect(canvas.width/bss, canvas.height/bss, canvas.width-(canvas.width/(bss/2)), canvas.height-(canvas.height/(bss/2)));
-		ctx.fillStyle = '#CD8646';
-      ctx.fill();
+	ctx.rect(canvas.width/bss, canvas.height/bss, canvas.width-(canvas.width/(bss/2)), canvas.height-(canvas.height/(bss/2)));
+	ctx.fillStyle = '#CD8646';
+    ctx.fill();
     ctx.lineWidth = 2;
     ctx.strokeStyle = "#46444C";
 		
@@ -167,6 +167,7 @@ function PlaceToken(xAxis,yAxis,color){
 		//x,y are center, tokens range out Math.floor((Width/20)*(2/3));
 		//Set [y][x] to corresponding color value
 		//then check state conditions
+		//idk
 		var canvas = document.getElementById('our_canvas');
 		var context = canvas.getContext('2d');
 		var axisX = Math.floor((Width/bss)*xAxis),
