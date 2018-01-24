@@ -57,11 +57,12 @@ function CreateBoardArray() {
 	boardStateArray[(bss/2)-1][(bss/2)-1] = 1;
 	console.log("bs:"+bs+", bss:"+bss);
 	PlaceToken(bss/2,bss/2,1);
+	return boardStateArray;
 }
 function CreateGameBoard(){
-	ctx.rect(canvas.width/bss, canvas.height/bss, canvas.width-(canvas.width/(bss/2)), canvas.height-(canvas.height/(bss/2)));
-	ctx.fillStyle = '#CD8646';
-    ctx.fill();
+		ctx.rect(canvas.width/bss, canvas.height/bss, canvas.width-(canvas.width/(bss/2)), canvas.height-(canvas.height/(bss/2)));
+		ctx.fillStyle = '#CD8646';
+      ctx.fill();
     ctx.lineWidth = 2;
     ctx.strokeStyle = "#46444C";
 		
@@ -101,13 +102,13 @@ function MouseClickValidation(canvas, event) {
 		var y = event.clientY - rect.top; 
 		x = Math.floor(((x/Width)*bss)+0.5);
 		y = Math.floor(((y/Height)*bss)+0.5);
-		console.log("x: " + x + " y: " + y);
+		//console.log("x: " + x + " y: " + y);
 		if(x > 0 && y > 0 && x < bss && y < bss){
 			//check if array at index is == 0
 			if(boardStateArray[y-1][x-1]===0){
-		console.log("Pass as valid at x: " + x + " y: " + y);
+		//console.log("Pass as valid at x: " + x + " y: " + y);
 				if(turnTwo && isPlayer1Turn){
-					if(y<((bss/2)-3) || y>((bss/2)+3)||((y>((bss/2)-3)&&y<((bss/2)+3))&&(x<((bss/2)-3)||x>((bss/2)+3)))){
+					if(y<((bss/2)-2) || y>((bss/2)+2)||((y>((bss/2)-2)&&y<((bss/2)+2))&&(x<((bss/2)-2)||x>((bss/2)+2)))){
 						turnTwo=false;
 						ValidTurn(x, y);
 					}
@@ -167,7 +168,6 @@ function PlaceToken(xAxis,yAxis,color){
 		//x,y are center, tokens range out Math.floor((Width/20)*(2/3));
 		//Set [y][x] to corresponding color value
 		//then check state conditions
-		//idk
 		var canvas = document.getElementById('our_canvas');
 		var context = canvas.getContext('2d');
 		var axisX = Math.floor((Width/bss)*xAxis),
@@ -183,7 +183,7 @@ function PlaceToken(xAxis,yAxis,color){
 			grd = context.createRadialGradient(Math.floor(axisX + r/5), Math.floor(axisY + r/5), r, axisX, axisY, Math.floor(r*1.6));
 			grd.addColorStop(0, '#222');
 			grd.addColorStop(1, '#FFF');		
-		} else { // white token
+		} else if (color === 2){ // white token
 			var grd = context.createRadialGradient( Math.floor(axisX - r/5),  Math.floor(axisY - r/5), r,  axisX,  axisY, Math.floor(r*1.6));
 			grd.addColorStop(0, '#FFF');
 			grd.addColorStop(1, '#000');
@@ -239,7 +239,7 @@ function GameOver(){
 //Game State Check Execution
 //Check that this is actually working
 function RunChecks(x, y){
-	console.log("runchecks with x:"+x+", y:"+y);
+	//console.log("runchecks with x:"+x+", y:"+y);
 	x= x-1;
 	y= y-1;
 	Captures(x, y);
@@ -568,134 +568,131 @@ function ConvertNameToLink(name) {
 //Game Configuration and Recording
 //make functional//check that read and write to file work
 function SaveGame(){
-	var filePath = "pente.txt";
-	SaveGame(filePath);
-}
-function SaveGameF(filePath){
+	var fileName = document.getElementById("sGame").value+"";
+	if(fileName === ""){
+		fileName = "PenteGame";
+	}
+	//console.log(fileName);
+	
 	//pause/stop clock
 	//ClockActive.stopTiming();
-	//import System.IO;
-	//write to file
-	var file = new File(filePath);//new File([""],txtFile);
-
-	file.open("w"); // open file with write access
-	transferToUrl
-	file.writeln("&player1Name:"+tourl(player1Name));
-	file.writeln("&player2Name:"+tourl(player2Name));
-	file.writeln("&isPlayer1Turn:"+isPlayer1Turn);
-	file.writeln("&isPlayerVsComputer:"+isPlayerVsComputer);
-	file.writeln("&player1Captures:"+player1Captures);
-	file.writeln("&player2Captures:"+player2Captures);
-	file.writeln("&turn2:"+turn2);
-	file.writeln("&bs:"+bs);
-	file.writeln("&gameOver:"+gameOver);
-	file.writeln("&boardStateArray:"+boardStateArray);
-	file.close();
 	
-	/*
-	import System.IO;
-	import System;  // Used for getting the date
-
-	function Start () {
-		// Create an instance of StreamWriter to write text to a file.
-		sw = new StreamWriter("TestFile.txt");
-		// Add some text to the file.
-		sw.Write("This is the ");
-		sw.WriteLine("header for the file.");
-		sw.WriteLine("-------------------");
-		// Arbitrary objects can also be written to the file.
-		sw.Write("The date is: ");
-		sw.WriteLine(DateTime.Now);
-		sw.Close();
-	}
-	*/
+	var info = "data:text/plain;charset=utf-8,";
+	//info = info + ("The date is: "+DateTime.Now);
+	info = info + ("&player1Name="+ConvertNameToLink(player1Name));
+	info = info + ("&player2Name="+ConvertNameToLink(player2Name));
+	info = info + ("&isPlayer1Turn="+isPlayer1Turn);
+	info = info + ("&isPlayerVsComputer="+isPlayerVsComputer);
+	info = info + ("&player1Captures="+player1Captures);
+	info = info + ("&player2Captures="+player2Captures);
+	info = info + ("&turnTwo="+turnTwo);
+	info = info + ("&bs="+bs);
+	info = info + ("&gameOver="+gameOver);
+	info = info + ("&boardStateArray="+boardStateArray);
+	
+	var link = document.createElement("a");
+    link.download = fileName;
+    link.href = info;
+    link.click();
+	
 	//when they return restart timer
 	//ClockActive.startTiming();
 }
 //work-on
 //check for file existance
 //Just need to add file name
-function ReadFromFile(filePath){
-	/// read from file
-//function ReadFile(filepathIncludingFileName : String) {
- //   sr = new File.OpenText(filepathIncludingFileName);
-//var filePath = "pente.txt";
-var file = new  File.OpenText(filePath);
+/**/
+function ReadFromFile(file){
+    var reader = new FileReader();
+	reader.onload = (function(file) {
+		return function(e) {
+			var str = e.target.result;
+			//console.log("str1 =",str);
+			var vars = {}, count=0, value;
+			var parts = str.split("&");
+			for(var i = 1; i< parts.length; i++){
+				var bits = parts[i].split("=");
+				if(count<2){
+					bits[1] = ConvertLinkToName(bits[1]);
+					count = count+1;
+				}
+				vars[bits[0]] = bits[1];
+			}
+			console.log("vars2 =",vars);
+			return LoadGame(vars);	
+        }})(file);
+      reader.readAsText(file);
+}//*/
+function Onclick_LoadGame(){
+	var files = document.getElementById('lGame').files;
+    
+	if (!files.length) {
+      alert('Please select a file!');
+      return;
+    } else if (files.length>1){
+      alert('Please select a single file!');
+      return;
+	}
 
-file.open("r"); // open file with read access
-var str = "";
-while (!file.eof) {
-	// read each line of text
-	str += file.readln() + "\n";
-}
-file.close();
-var vars = {}, count=0
-        parts = str.replace(/[&]+([^=&]+)=([^&]*)/gi, function (n, key, value) {
-	if(count<2){
-value = ConvertLinkToName(value);
-count = count+1;
-}
-            vars[key] = value;
-        });
-/*
-try {
-        // Create an instance of StreamReader to read from a file.
-        sr = new StreamReader("TestFile.txt");
-        // Read and display lines from the file until the end of the file is reached.
-        line = sr.ReadLine();
-        while (line != null) {
-            print(line);
-            line = sr.ReadLine();
-        }
-        sr.Close();
-    }
-    catch (e) {
-        // Let the user know what went wrong.
-        print("The file could not be read:");
-        print(e.Message);
-    }
-*/
-//vars = str.split('!');
-//transferFromUrl
-return vars;
-}
-function LoadGame(filePath){
-	var vars = ReadFromFile(filePath);
-	//read file
-	
-	isPlayerVsComputer = vars.isPlayerVsComputer === "true";
-	player1Name = vars.player1Name;
-	player2Name = vars.player2Name;
-	console.log(isPlayerVsComputer, player1Name, player2Name);
-	document.getElementById("player1").innerHTML = player1Name;
-	document.getElementById("player2").innerHTML = player2Name;
-	
-	turnTwo = vars.turnTwo;
-	gameOver = vars.gameOver === "true";
-	isPlayer1Turn = vars.isPlayer1Turn === "true";
-	
-	player1Captures = vars.player1Captures;
-	player2Captures = vars.player2Captures;
-	document.getElementById("player1_captures").innerHTML = player1Captures;	
-	document.getElementById("player2_captures").innerHTML = player2Captures;
-	
-	boardStateArray = vars.boardStateArray;
-	
-	bs = (vars.bs)?parseInt(vars.bs): bs;
-	bss = bs+1;
-	CreateGameBoard();
-	PlaceExistingTokens();
-	
-    if(gameOver){
-		GameOver();//S(isPlayer1Turn?player1Name:player2Name);
-	} else {
-		TurnLabel();
-		ClockActive.startTiming();
-		canvas.addEventListener('mousedown', function(evt) {
-				MouseClickValidation(canvas, evt);
-			});	
+    var file = files[0];
+	if(file){
+		var vars = ReadFromFile(file);
 	}
 }
+function LoadGame(vars){
+	if(vars){
+		ClockActive.stopTiming();
+		console.log("vars =",vars);
+		
+		isPlayerVsComputer = vars.isPlayerVsComputer === "true";
+		player1Name = vars.player1Name;
+		player2Name = vars.player2Name;
+		console.log(isPlayerVsComputer, player1Name, player2Name);
+		document.getElementById("player1").innerHTML = player1Name;
+		document.getElementById("player2").innerHTML = player2Name;
+
+		turnTwo = vars.turnTwo === "true";
+		gameOver = vars.gameOver === "true";
+		isPlayer1Turn = vars.isPlayer1Turn === "true";
+		console.log(turnTwo, gameOver, isPlayer1Turn);
+
+		player1Captures = parseInt(vars.player1Captures);
+		player2Captures = parseInt(vars.player2Captures);
+		document.getElementById("player1_captures").innerHTML = player1Captures;	
+		document.getElementById("player2_captures").innerHTML = player2Captures;
+
+		bs = (vars.bs)?parseInt(vars.bs): bs;
+		bss = bs+1;
+
+		var tempBoardArray = vars.boardStateArray.split(",");
+		var count = 0;
+		boardStateArray = [bs];
+		for (var y=0; y<bs; y++){
+			boardStateArray[y] = [bs];
+			for (var x=0; x<bs; x++){
+				boardStateArray[y][x]=parseInt(tempBoardArray[count]);
+				count+=1;
+			}
+		}
+	console.log("bs:"+bs+", bss:"+bss+", Array:"+boardStateArray);
+
+		ctx.clearRect(0, 0, Width, Height);
+		CreateGameBoard();
+		PlaceExistingTokens();
+
+		if(gameOver){
+			GameOver();
+		} else {
+			TurnLabel(isPlayer1Turn?player1Name:player2Name);
+			ClockActive.startTiming();
+			canvas.addEventListener('mousedown', function(evt) {
+					MouseClickValidation(canvas, evt);
+				});	
+		}
+	}
+	console.log("Done with set up");
+}
+//*/
 //Starting a new game
 function NewGame(vars){
     //set player 1 & 2's names, change computer bool
@@ -723,6 +720,8 @@ function NewGame(vars){
 
 //Page Startup
 function SetUpGame() {
+	//document.getElementById("saveGame").addEventListener("onclick", SaveGame);
+	//document.getElementById("loadGame").addEventListener("onclick", LoadGame);
 	ClockActive = new Clock();
 	canvas = document.getElementById('our_canvas');
 	ctx = canvas.getContext('2d');
@@ -735,8 +734,9 @@ function SetUpGame() {
 			value = ConvertLinkToName(value);
             vars[key] = value;
         });
+	console.log("Vars setup:", vars);
 	if (vars.state && vars.state === 'load') {
-		LoadGame(vars.fileName);		
+		LoadGame(vars);		
 	} else {
 		NewGame(vars);	
 	}
