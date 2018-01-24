@@ -174,12 +174,18 @@ a {
     font-size: 18px;
     font-family: 'Aladin', cursive;
 }
+#saveBox ::-webkit-input-placeholder {
+    color: var(--color-3);
+    font-size: 18px;
+    font-family: 'Aladin', cursive;
+}
 #saveBox input {
     color: var(--color-3);
     background: var(--color-4);
     border: 2px solid var(--color-2);
     font-size: 18px;
     font-family: 'Aladin', cursive;
+    padding-left: 5px;
 }
 #loadBox2 {
     margin-top: 20px;
