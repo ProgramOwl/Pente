@@ -167,6 +167,7 @@ function PlaceToken(xAxis,yAxis,color){
 		//x,y are center, tokens range out Math.floor((Width/20)*(2/3));
 		//Set [y][x] to corresponding color value
 		//then check state conditions
+		//idk
 		var canvas = document.getElementById('our_canvas');
 		var context = canvas.getContext('2d');
 		var axisX = Math.floor((Width/bss)*xAxis),
