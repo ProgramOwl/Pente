@@ -70,9 +70,50 @@ function onSubmit() {
 	return false;
 }
 
-function fileLoad(fileName){
+function fileLoad(fileStr){
+	var linkAddress = "?state=load" + fileStr;
+	window.location = "pente.html" + linkAddress;
+}
+/*function fileLoad(fileName){
 	var linkAddress = "?state=load"+"&fileName="+fileName;
 	window.location = "pente.html" + linkAddress;
+}*/
+function ReadFromFile(file){
+    var reader = new FileReader();
+	reader.onload = (function(file) {
+		return function(e) {
+			var str = e.target.result;
+			//console.log("str1 =",str);
+			/*var vars = {}, count=0, value;
+			var parts = str.split("&");
+			for(var i = 1; i< parts.length; i++){
+				var bits = parts[i].split(":");
+				if(count<2){
+					bits[1] = ConvertLinkToName(bits[1]);
+					count = count+1;
+				}
+				vars[bits[0]] = bits[1];
+			}
+			console.log("vars2 =",vars);*/
+			fileLoad(str);	
+        }})(file);
+      reader.readAsText(file);
+}
+function Onclick_LoadGame(){
+	var files = document.getElementById('game').files;
+    if (!files.length) {
+      alert('Please select a file!');
+      return;
+    } else if (files.length>1){
+      alert('Please select a single file!');
+      return;
+	}
+
+    var file = files[0];
+	if(file){
+		var vars = ReadFromFile(file);
+		//fileLoad(file);
+	}
 }
 
 window.addEventListener("onload", gameTypeChosen());
