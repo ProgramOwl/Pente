@@ -1,6 +1,7 @@
 //Game Board 
+//generates an initial board game array of all 0,
+//places the first move piece colored black on the center of the board
 function UnitTestCreateBoardArray(){
-	//generates an initial board game array of all 0 and places the first move as a black on center
 	var valid = false;
 	isPlayerVsComputer = false;
 	CreateBoardArray();
@@ -21,8 +22,10 @@ function UnitTestCreateBoardArray(){
 	}
 }
 //Players
+//gets the mouse's current position on the canvas,
+// checks if it is a valid move,
+// if move is valid, then call ValidTurn() method
 function UnitTestMouseClickValidation(){//canvas, event
-	//gets the mouses current position on the canvas, checks if it is a valid move, if so then it calls ValidTurn(x, y)
 	var valid = false;
 	turnTwo = false;
 	isPlayer1Turn = false;
@@ -57,8 +60,9 @@ function UnitTestMouseClickValidation(){//canvas, event
 		console.log("Click Validation is Not Valid");
 	}
 }
+//generates a random point and does so until it finds a valid one,
+// then calls the ValidTurn() method
 function UnitTestComputerTurn(){
-	//generates a random point and does so untill it finds a valid one, then is calls ValidTurn(x, y)
 	var valid = false;
 	ComputerTurn();
 	if(randX > 0 && randY > 0 && randX < bss && randY < bss){
@@ -77,9 +81,10 @@ function UnitTestComputerTurn(){
 		console.log("Computer Turn is Not Valid");
 	}
 }
-//Switching player
+//Switches the current player's turn,
+//resets the turn clock,
+//calls TurnLabel()
 function UnitTestTurnSwap(){
-	//resets the clock, swaps players and calls TurnLabel
 	isPlayer1Turn = true;
 	var valid = false;
 	Turnswap();
@@ -92,11 +97,9 @@ function UnitTestTurnSwap(){
 		console.log("Turn Swap is Not Valid");
 	}
 }
-function UnitTestTurnLabel(){//name
-	//updates the current turn label text, returns name factor
-	//checks if name ends in s such as to properly position ' 
-	//Ex.console.log("Sam's" === TurnLabel("Sam"));	
-	//Ex.console.log("Owls'" === TurnLabel("Owls"));
+//updates the current turn label text, returns name factor
+//checks if name ends in s to properly position an apostrophe 
+function UnitTestTurnLabel(){
 	var valid = false;
 	TurnLabel("Krebs");
 	if(name == "Krebs'") {
@@ -110,9 +113,9 @@ function UnitTestTurnLabel(){//name
 		console.log("Turn Label is Not Valid");
 	}
 }
+
+//check that gameOver boolean is true and that the winner is the correct winner, based upon isPlayer1Turn boolean
 function UnitTestGameOver(){
-	//sets gameOver to true and displays winner
-	//check that gameOver is true and that the winner is right, based upon isPlayer1Turn
 	player1Name = "Mark";
 	isPlayer1Turn = true;
 	gameOver = false;
@@ -135,9 +138,8 @@ function UnitTestGameOver(){
 	}
 }
 //Checking game conditions
-function UnitTestCaptures(){//x, y
-	//sets gameOver to true and displays winner
-	//(check array after)
+//sets gameOver to true and displays winner
+	function UnitTestCaptures(){
 	isPlayer1Turn = true;
 	player1Captures = 10;
 	var valid = true;
@@ -153,8 +155,10 @@ function UnitTestCaptures(){//x, y
 		console.log("Captures is Not Valid");
 	}
 }
-function UnitTestInARowCount(){//x, y
-	//returns Array , i.e. rowAmounts
+//Checks the coordinates passed in,
+//Checks for pieces horizontal, vertical, and diagonally up/down 
+//returns amount of pieces in a row (total count for all directions) 
+function UnitTestInARowCount(){
 	var valid = false;
 	for(var i = 0; i < 9; i++) {
 		boardStateArray[y] = [9];
@@ -177,9 +181,11 @@ function UnitTestInARowCount(){//x, y
 		console.log("In a Row Count is Not Valid");
 	}
 }
-function UnitTestFiveOrMoreInARow(){//rowAmounts
-	//returns boolean, and calls GameOver
-	//(check game over)
+//Checks the coordinates passed in,
+//Checks for 5 pieces in a row horizontally, vertically, and diagonally up/down  
+//returns boolean for whether or not there are 5 pieces in a row,
+//calls GameOver()
+function UnitTestFiveOrMoreInARow(){
 	var valid = false;
 	for(var i = 0; i < 9; i++) {
 		boardStateArray[y] = [9];
@@ -204,8 +210,10 @@ function UnitTestFiveOrMoreInARow(){//rowAmounts
 		console.log("5 In a Row Count is Not Valid");
 	}
 }
-function UnitTestFourInARow(){//x,y, rowAmounts
-	//returns boolean
+//Checks the coordinates passed in,
+//Checks for 4 pieces in a row horizontally, vertically, and diagonally up/down,
+//returns boolean for whether or not there is a tessera
+function UnitTestFourInARow(){
 	var valid = false;
 	for(var i = 0; i < 9; i++) {
 		boardStateArray[y] = [9];
@@ -230,8 +238,10 @@ function UnitTestFourInARow(){//x,y, rowAmounts
 		console.log("4 In a Row Count is Not Valid");
 	}
 } 
-function UnitTestThreeInARow(){//x,y, rowAmounts
-	//returns boolean
+//Checks the coordinates passed in,
+//Checks for 3 pieces in a row horizontally, vertically, and diagonally up/down,
+//returns boolean for whether or not there is a trie
+function UnitTestThreeInARow(){
 	var valid = false;
 	for(var i = 0; i < 9; i++) {
 		boardStateArray[y] = [9];
