@@ -4,7 +4,20 @@ var canvas = document.getElementById('our_canvas'),
   Height = canvas.height,
   Width = canvas.width;
 
-//Variables for Gameplay
+/*Variables for Gameplay
+bs - Board Size
+bss - Board Secondary Size (Board Size + 1)
+turnTwo - Player Two's turn
+ClockActive - Clock Timer boolean to tell if it's on or not
+gameOver - Is the game over, true or false.
+player1Name - First Player's Name
+player1Captures - Amount of captured pairs for each player
+player2Name - Second Player's Name
+player2Captures - Amount of captured pairs for each player
+isPlayer1Turn - Boolean to determine if it is Player 1's turn or not
+boardStateArray - Array used for the Game Board's tokens
+*/
+
 var bs = 19,
   bss = 20,
   turnTwo = true,
@@ -17,7 +30,10 @@ var bs = 19,
   isPlayer1Turn = true,
   boardStateArray;
 
-//Timer Function. Times!
+//Timer Function.
+/*
+Places a Timer HTML element at the top, and times each players turn for 20 seconds.
+*/
 function Clock() {
   var clockInt,
     cl = document.getElementById("turn_clock"),
@@ -60,7 +76,7 @@ function CreateBoardArray() {
   return boardStateArray;
 }
 
-//Creates the Gameboard on the HTML
+//Creates the Gameboard on the HTML Canvas for the player to view
 function CreateGameBoard() {
   ctx.rect(canvas.width / bss, canvas.height / bss, canvas.width - (canvas.width / (bss / 2)), canvas.height - (canvas.height / (bss / 2)));
   ctx.fillStyle = '#CD8646';
@@ -98,7 +114,7 @@ function CreateGameBoard() {
 }
 
 //Players
-//Validates if a mouse click is legal on the gameboard
+//Validates if a mouse click is legal on the gameboard, leads into letting the player place a token on the game board.
 function MouseClickValidation(canvas, event) {
   if (!gameOver) {
     var rect = canvas.getBoundingClientRect();
@@ -125,7 +141,7 @@ function MouseClickValidation(canvas, event) {
 }
 
 //Computer
-//Selects a random placement on the board for the Computer Player.
+//Selects a random placement on the board for the Computer Player to place their token.
 function ComputerTurn() {
   if (!gameOver) {
     //window.setTimeout(null, 5000);
@@ -160,7 +176,7 @@ function ValidTurn(x, y) {
   Turnswap();
 }
 
-//Places all existing tokens on the board based on array values.
+//Places all existing tokens on the board based on board state array values.
 function PlaceExistingTokens() {
   for (var y = 0; y < bs; y++) {
     for (var x = 0; x < bs; x++) {
@@ -366,7 +382,7 @@ function Captures(x, y) { //Captures Logic
   }
 }
 
-//Check for Amounts of tokens in a row
+//Check for Amounts of tokens in a row. With...an algorithm. Via lots of if statements.
 function InARowCount(x, y) {
   //Five in a row
   var spotVal = boardStateArray[y][x];
@@ -735,14 +751,11 @@ function NewGame(vars) {
 
 //Game Page Set Up Function - Sets up the game HTML page to show UI
 function SetUpGame() {
-  //document.getElementById("saveGame").addEventListener("onclick", SaveGame);
-  //document.getElementById("loadGame").addEventListener("onclick", LoadGame);
   ClockActive = new Clock();
   canvas = document.getElementById('our_canvas');
   ctx = canvas.getContext('2d');
   Height = canvas.height;
   Width = canvas.width;
-  //add dave and download button connections
 
   var vars = {},
     parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function (n, key, value) {
