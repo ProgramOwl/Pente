@@ -70,35 +70,24 @@ function onSubmit() {
 	return false;
 }
 
+//Loads the File String
 function fileLoad(fileStr){
 	var linkAddress = "?state=load" + fileStr;
 	window.location = "pente.html" + linkAddress;
 }
-/*function fileLoad(fileName){
-	var linkAddress = "?state=load"+"&fileName="+fileName;
-	window.location = "pente.html" + linkAddress;
-}*/
+
+//Reads from a File, then loads the file
 function ReadFromFile(file){
     var reader = new FileReader();
 	reader.onload = (function(file) {
 		return function(e) {
 			var str = e.target.result;
-			//console.log("str1 =",str);
-			/*var vars = {}, count=0, value;
-			var parts = str.split("&");
-			for(var i = 1; i< parts.length; i++){
-				var bits = parts[i].split(":");
-				if(count<2){
-					bits[1] = ConvertLinkToName(bits[1]);
-					count = count+1;
-				}
-				vars[bits[0]] = bits[1];
-			}
-			console.log("vars2 =",vars);*/
 			fileLoad(str);	
         }})(file);
       reader.readAsText(file);
 }
+
+//Allows for user to select a file, then proceeds to load it.
 function Onclick_LoadGame(){
 	var files = document.getElementById('game').files;
     if (!files.length) {
@@ -112,7 +101,6 @@ function Onclick_LoadGame(){
     var file = files[0];
 	if(file){
 		var vars = ReadFromFile(file);
-		//fileLoad(file);
 	}
 }
 
