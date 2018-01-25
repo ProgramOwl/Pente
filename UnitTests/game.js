@@ -147,30 +147,137 @@ function UnitTestCaptures(){//x, y
 	} else {
 		valid = false;
 	}
+	if(valid) {
+		console.log("Captures is Valid");
+	} else {
+		console.log("Captures is Not Valid");
+	}
 }
 function UnitTestInARowCount(){//x, y
 	//returns Array , i.e. rowAmounts
+	var valid = false;
+	for(var i = 0; i < 9; i++) {
+		boardStateArray[y] = [9];
+		for(var j = 0; j < 9; j++) {
+			boardStateArray[y][x] = 0;
+		}
+	}
+	boardStateArray[5][5] = 1;
+	boardStateArray[5][4] = 1;
+	boardStateArray[5][3] = 1;
+	InARowCount(5, 4);
+	if(amountOnRow[0][0] == 3) {
+		valid = true;
+	} else {
+		valid = false;
+	}
+	if(valid) {
+		console.log("In a Row Count is Valid");
+	} else {
+		console.log("In a Row Count is Not Valid");
+	}
 }
 function UnitTestFiveOrMoreInARow(){//rowAmounts
 	//returns boolean, and calls GameOver
 	//(check game over)
+	var valid = false;
+	for(var i = 0; i < 9; i++) {
+		boardStateArray[y] = [9];
+		for(var j = 0; j < 9; j++) {
+			boardStateArray[y][x] = 0;
+		}
+	}
+	boardStateArray[5][5] = 1;
+	boardStateArray[5][4] = 1;
+	boardStateArray[5][3] = 1;
+	boardStateArray[5][2] = 1;
+	boardStateArray[5][1] = 1;
+	InARowCount(5, 3);
+	if(FiveOrMoreInARow(amountOnRow)) {
+		valid = true;
+	} else {
+		valid = false;
+	}
+	if(valid) {
+		console.log("5 In a Row Count is Valid");
+	} else {
+		console.log("5 In a Row Count is Not Valid");
+	}
 }
 function UnitTestFourInARow(){//x,y, rowAmounts
 	//returns boolean
+	var valid = false;
+	for(var i = 0; i < 9; i++) {
+		boardStateArray[y] = [9];
+		for(var j = 0; j < 9; j++) {
+			boardStateArray[y][x] = 0;
+		}
+	}
+	boardStateArray[5][5] = 1;
+	boardStateArray[5][4] = 1;
+	boardStateArray[5][3] = 1;
+	boardStateArray[5][2] = 1;
+	InARowCount(5, 3);
+	FourInARow(5, 3, amountOnRow);
+	if(hasATessera) {
+		valid = true;
+	} else {
+		valid = false;
+	}
+	if(valid) {
+		console.log("4 In a Row Count is Valid");
+	} else {
+		console.log("4 In a Row Count is Not Valid");
+	}
 } 
 function UnitTestThreeInARow(){//x,y, rowAmounts
 	//returns boolean
+	var valid = false;
+	for(var i = 0; i < 9; i++) {
+		boardStateArray[y] = [9];
+		for(var j = 0; j < 9; j++) {
+			boardStateArray[y][x] = 0;
+		}
+	}
+	boardStateArray[5][5] = 1;
+	boardStateArray[5][4] = 1;
+	boardStateArray[5][3] = 1;
+	InARowCount(5, 3);
+	ThreeInARow(5, 4)
+	if(hasATrie) {
+		valid = true;
+	} else {
+		valid = false;
+	}
+	if(valid) {
+		console.log("3 In a Row Count is Valid");
+	} else {
+		console.log("3 In a Row Count is Not Valid");
+	}
 }
 //(make documented manual test):
 function UnitTestCreateGameBoard(){
 	//draws the board, background square and axis lines
+	//choose size of board array
+	//start game
+	//count number of boxes and see if the same dimensions
 }
 //Tokens
 function UnitTestPlaceExistingTokens(){
 	//does just that on the already existing canvas by reading the current boardStateArray
+	//start game
+	//place peices where you want
+	//save game
+	//reset
+	//load game
+	//make sure peice are in the same place
 }
 function UnitTestPlaceToken(){//x, y, color
 	//just places a token on the graph at the given x, y, and selects the token style based on the color value, 1=black, anything else = white
+	//start game
+	//click where you want
+	//make sure your token appears
+	//if first player make sure piece is black
 }
 //Conversions
 function UnitTestConvertNameToLink() {
