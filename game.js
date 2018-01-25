@@ -566,7 +566,7 @@ function ConvertNameToLink(name) {
 }
 
 //Game Configuration and Recording
-//make functional//check that read and write to file work
+//write current game data to a file
 function SaveGame(){
 	var fileName = document.getElementById("sGame").value+"";
 	if(fileName === ""){
@@ -598,10 +598,7 @@ function SaveGame(){
 	//when they return restart timer
 	//ClockActive.startTiming();
 }
-//work-on
-//check for file existance
-//Just need to add file name
-/**/
+//reads file data and send the data through a call to load game
 function ReadFromFile(file){
     var reader = new FileReader();
 	reader.onload = (function(file) {
@@ -622,7 +619,8 @@ function ReadFromFile(file){
 			return LoadGame(vars);	
         }})(file);
       reader.readAsText(file);
-}//*/
+}
+//check for file existance
 function Onclick_LoadGame(){
 	var files = document.getElementById('lGame').files;
     
