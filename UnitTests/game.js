@@ -1,7 +1,3 @@
-//Timer
-function UnitTestClock(){
-	//creates a clock item
-}
 //Game Board 
 function UnitTestCreateBoardArray(){
 	//generates an initial board game array of all 0 and places the first move as a black on center
